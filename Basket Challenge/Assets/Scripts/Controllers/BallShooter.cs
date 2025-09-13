@@ -27,7 +27,7 @@ public class BallShooter : MonoBehaviour
         }
     }
    
-    public void Shoot(float power)
+    public void Shoot(float power, bool perfectShot)
     {
         gestureController.enabled = false;
 

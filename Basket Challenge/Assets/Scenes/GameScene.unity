@@ -235,20 +235,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
-    - target: {fileID: 3666032111190032418, guid: 5f3839588e246c24496f3c58d09695d2,
+    - target: {fileID: 3301835880373716714, guid: 5f3839588e246c24496f3c58d09695d2,
         type: 3}
-      propertyPath: m_Value
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3666032111190032418, guid: 5f3839588e246c24496f3c58d09695d2,
-        type: 3}
-      propertyPath: m_Transition
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3666032111190032418, guid: 5f3839588e246c24496f3c58d09695d2,
-        type: 3}
-      propertyPath: m_Interactable
-      value: 0
+      propertyPath: m_Color.a
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4242257289336195676, guid: 5f3839588e246c24496f3c58d09695d2,
         type: 3}
@@ -257,17 +247,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4278494050651794047, guid: 5f3839588e246c24496f3c58d09695d2,
         type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4278494050651794047, guid: 5f3839588e246c24496f3c58d09695d2,
-        type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4501833649091699782, guid: 5f3839588e246c24496f3c58d09695d2,
-        type: 3}
-      propertyPath: m_AnchorMax.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4501833649091699782, guid: 5f3839588e246c24496f3c58d09695d2,
@@ -275,15 +255,15 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4501833649091699782, guid: 5f3839588e246c24496f3c58d09695d2,
+    - target: {fileID: 5815274989039092327, guid: 5f3839588e246c24496f3c58d09695d2,
         type: 3}
-      propertyPath: m_AnchorMin.x
+      propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5028058398165777243, guid: 5f3839588e246c24496f3c58d09695d2,
+    - target: {fileID: 9049186927871283019, guid: 5f3839588e246c24496f3c58d09695d2,
         type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0.06570053
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5f3839588e246c24496f3c58d09695d2, type: 3}
@@ -343,6 +323,10 @@ MonoBehaviour:
   powerSlider: {fileID: 584728815}
   gestureTimeLimit: 3
   sensitivity: 0.001
+  perfectShotRangeSize: 0.15
+  perfectZoneColor: {r: 0, g: 1, b: 0, a: 1}
+  normalZoneColor: {r: 1, g: 1, b: 1, a: 1}
+  perfectZoneIndicator: {fileID: 1490332767}
 --- !u!114 &63459074
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -941,6 +925,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1490332767 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9049186927871283019, guid: 5f3839588e246c24496f3c58d09695d2,
+    type: 3}
+  m_PrefabInstance: {fileID: 7008139}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1657511885
 GameObject:
   m_ObjectHideFlags: 0
