@@ -93,7 +93,7 @@ public class BallShooter : MonoBehaviour
         
         if (float.IsNaN(velocityMagnitude) || float.IsInfinity(velocityMagnitude))
         {
-            Debug.LogError("❌ Could not calculate valid trajectory!");
+            Debug.LogError("Could not calculate valid trajectory!");
             return Vector3.zero;
         }
         
