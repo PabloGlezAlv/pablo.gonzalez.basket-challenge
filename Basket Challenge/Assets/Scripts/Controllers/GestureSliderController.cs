@@ -19,7 +19,6 @@ public class GestureSliderController : MonoBehaviour
     
     [Header("Visual Perfect Zone")]
     [SerializeField] private GameObject perfectZoneIndicator;
-    [SerializeField] private float perfectZoneHeight = 20f;
    
     private InputAction touchPressAction;
     private InputAction touchDeltaAction;
@@ -34,6 +33,8 @@ public class GestureSliderController : MonoBehaviour
     private float perfectShotMax;
     private RectTransform perfectZoneRect;
    
+    private float sliderWidth;
+
     public System.Action<float, bool> OnShoot;
    
     void Start()
@@ -45,29 +46,22 @@ public class GestureSliderController : MonoBehaviour
             perfectZoneRect = perfectZoneIndicator.GetComponent<RectTransform>();
             perfectZoneIndicator.SetActive(false);
         }
+
+        sliderWidth = GetComponent<RectTransform>().rect.width;
     }
     
     void UpdatePerfectZoneVisual()
     {
         if (perfectZoneRect == null || sliderBackground == null) return;
         
-        float sliderWidth = sliderBackground.rect.width;
-        float sliderHeight = sliderBackground.rect.height;
-        
         float startX = perfectShotMin * sliderWidth;
-        float width = (perfectShotMax - perfectShotMin) * sliderWidth;
-        
-        if (perfectZoneIndicator.transform.parent != sliderBackground)
-        {
-            perfectZoneIndicator.transform.SetParent(sliderBackground, false);
-        }
         
         perfectZoneRect.anchorMin = new Vector2(0, 0.5f);
         perfectZoneRect.anchorMax = new Vector2(0, 0.5f);
         perfectZoneRect.pivot = new Vector2(0, 0.5f);
         
         perfectZoneRect.anchoredPosition = new Vector2(startX, 0);
-        perfectZoneRect.sizeDelta = new Vector2(width, perfectZoneHeight);
+        perfectZoneRect.sizeDelta = new Vector2(sliderWidth * perfectShotRangeSize, perfectZoneRect.sizeDelta.y);
         
         perfectZoneIndicator.SetActive(true);
     }
