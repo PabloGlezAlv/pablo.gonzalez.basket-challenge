@@ -48,6 +48,21 @@ public class BallShooter : MonoBehaviour
             return;
         }
 
+        if(!perfectShot)
+        {
+            float powerVariation = Random.Range(0.85f, 1.2f);
+            velocity *= powerVariation;
+            
+            float horizontalDeviation = Random.Range(-0.5f, 0.5f);
+            Vector3 rightDirection = Vector3.Cross(Vector3.up, velocity.normalized);
+            velocity += rightDirection * horizontalDeviation;
+            
+            float verticalDeviation = Random.Range(0.1f, 0.2f);
+            velocity.y += verticalDeviation;
+
+            Debug.Log(verticalDeviation);
+        }
+
         Rigidbody ballRb = currentBall.GetComponent<Rigidbody>();
         ballRb.velocity = velocity;
     }
