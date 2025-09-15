@@ -20,7 +20,7 @@ public class BallShooter : MonoBehaviour
 
     void Start()
     {
-        gestureController = FindObjectOfType<GestureSliderController>();
+        gestureController = FindObjectOfType<GestureSliderController>(true);
         if (gestureController != null)
         {
             gestureController.OnShoot += Shoot;

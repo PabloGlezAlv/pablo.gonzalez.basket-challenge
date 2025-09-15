@@ -30,7 +30,8 @@ public class CameraMenuController : MonoBehaviour
     {
         Menu,
         Gameplay,
-        Reward
+        Reward,
+        PlayAgain
     }
 
     private void Awake()
@@ -56,6 +57,16 @@ public class CameraMenuController : MonoBehaviour
     public void MoveToReward()
     {
         MoveTo(CameraState.Reward);
+    }
+
+    public void MoveToPlayAgain()
+    {
+        MoveTo(CameraState.PlayAgain);
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
     }
 
     public void MoveTo(CameraState targetState)
