@@ -1,5 +1,12 @@
 using UnityEngine;
 
+public enum ShotType
+{
+    Normal,
+    Perfect,
+    Backboard
+}
+
 public class BallShooter : MonoBehaviour
 {
     [Header("References")]
@@ -19,8 +26,7 @@ public class BallShooter : MonoBehaviour
 
     private GameObject currentBall;
 
-    private float pendingPower;
-    private bool pendingPerfect;
+    private ShotType shotType;
     private bool hasPendingShot;
 
     void Start()
@@ -44,10 +50,9 @@ public class BallShooter : MonoBehaviour
             playerAnimator.OnReadyToShootEvent -= OnReadyToShoot;
     }
 
-    void CacheShot(float power, bool perfectShot)
+    void CacheShot(ShotType type)
     {
-        pendingPower = power;
-        pendingPerfect = perfectShot;
+        shotType = type;
         hasPendingShot = true;
     }
 
@@ -56,11 +61,11 @@ public class BallShooter : MonoBehaviour
         Debug.Log("BallShooter: Player ready, executing pending shot");
         if (!hasPendingShot) return;
 
-        Shoot(pendingPower, pendingPerfect);
+        Shoot(shotType);
         hasPendingShot = false;
     }
 
-    public void Shoot(float power, bool perfectShot)
+    public void Shoot(ShotType shotType)
     {
         if (basketTarget == null || gestureController == null) return;
 
@@ -70,10 +75,10 @@ public class BallShooter : MonoBehaviour
         SpawnBall();
         if (currentBall == null) return;
 
-        Vector3 velocity = CalculateParabolicVelocity(power);
+        Vector3 velocity = CalculateParabolicVelocity();
         if (velocity == Vector3.zero) return;
 
-        if (!perfectShot)
+        if (shotType == ShotType.Normal)
         {
             float powerVariation = Random.Range(0.85f, 1.2f);
             velocity *= powerVariation;
@@ -93,7 +98,7 @@ public class BallShooter : MonoBehaviour
         currentBall = Instantiate(ballPrefab, shootingPosition.position, Quaternion.identity);
     }
 
-    Vector3 CalculateParabolicVelocity(float power)
+    Vector3 CalculateParabolicVelocity()
     {
         Vector3 startPos = shootingPosition.position;
         Vector3 targetPos = basketTarget.position;
@@ -130,52 +135,52 @@ public class BallShooter : MonoBehaviour
     void OnDrawGizmos()
     {
         if (!showGizmos) return;
-       
+
         if (shootingPosition != null)
         {
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(shootingPosition.position, 0.2f);
         }
-       
+
         if (basketTarget != null)
         {
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(basketTarget.position, 0.3f);
-            
+
             if (shootingPosition != null)
             {
                 Gizmos.color = Color.yellow;
                 Gizmos.DrawLine(shootingPosition.position, basketTarget.position);
             }
         }
-        
+
         if (showTrajectory && basketTarget != null && shootingPosition != null)
         {
-            DrawTrajectoryGizmo(0.5f);
+            DrawTrajectoryGizmo();
         }
     }
-    
-    void DrawTrajectoryGizmo(float power)
+
+    void DrawTrajectoryGizmo()
     {
-        Vector3 velocity = CalculateParabolicVelocity(power);
+        Vector3 velocity = CalculateParabolicVelocity();
         if (velocity == Vector3.zero) return;
-        
+
         Vector3 currentPos = shootingPosition.position;
         Vector3 currentVel = velocity;
         float timeStep = 0.1f;
-        
+
         Gizmos.color = Color.cyan;
-        
+
         for (int i = 0; i < trajectoryPoints; i++)
         {
             Vector3 nextPos = currentPos + currentVel * timeStep;
             nextPos.y += 0.5f * Physics.gravity.y * timeStep * timeStep;
-            
+
             Gizmos.DrawLine(currentPos, nextPos);
-            
+
             currentPos = nextPos;
             currentVel.y += Physics.gravity.y * timeStep;
-            
+
             if (currentPos.y < basketTarget.position.y - 5f)
                 break;
         }

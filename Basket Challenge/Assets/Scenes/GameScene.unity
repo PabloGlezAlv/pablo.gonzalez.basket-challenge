@@ -375,6 +375,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Throw Slider
       objectReference: {fileID: 0}
+    - target: {fileID: 4278494050651794047, guid: 5f3839588e246c24496f3c58d09695d2,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4501833649091699782, guid: 5f3839588e246c24496f3c58d09695d2,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5f3839588e246c24496f3c58d09695d2, type: 3}
 --- !u!224 &7008140 stripped
@@ -2896,6 +2906,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1014753099}
   m_CullTransparentMesh: 1
+--- !u!1 &1033358740 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1033358740, guid: 5f3839588e246c24496f3c58d09695d2,
+    type: 3}
+  m_PrefabInstance: {fileID: 7008139}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1086152019 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1086152019, guid: 621cfe50b49a44c46a00b3cc936b3264,
@@ -4921,7 +4937,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1767096871
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5673,7 +5689,9 @@ MonoBehaviour:
   gestureTimeLimit: 3
   sensitivity: 0.001
   perfectShotRangeSize: 0.15
+  backboardShotRangeSize: 0.1
   perfectZoneIndicator: {fileID: 1693065222}
+  backboardZoneIndicator: {fileID: 1033358740}
 --- !u!1 &2025083647
 GameObject:
   m_ObjectHideFlags: 0

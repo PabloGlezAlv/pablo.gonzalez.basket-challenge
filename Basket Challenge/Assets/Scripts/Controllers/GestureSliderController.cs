@@ -18,8 +18,12 @@ public class GestureSliderController : MonoBehaviour
     [Header("Perfect Shot Settings")]
     [SerializeField] private float perfectShotRangeSize = 0.15f;
 
-    [Header("Visual Perfect Zone")]
+    [Header("Backboard Shot Settings")]
+    [SerializeField] private float backboardShotRangeSize = 0.15f;
+
+    [Header("Visual Zones")]
     [SerializeField] private GameObject perfectZoneIndicator;
+    [SerializeField] private GameObject backboardZoneIndicator;
 
     private InputAction touchPressAction;
     private InputAction touchDeltaAction;
@@ -32,11 +36,17 @@ public class GestureSliderController : MonoBehaviour
     private float perfectShotCenter;
     private float perfectShotMin;
     private float perfectShotMax;
+
+    private float backboardShotCenter;
+    private float backboardShotMin;
+    private float backboardShotMax;
+
     private RectTransform perfectZoneRect;
+    private RectTransform backboardZoneRect;
 
     private float sliderWidth;
 
-    public System.Action<float, bool> OnShoot;
+    public System.Action<ShotType> OnShoot;
 
     void Awake()
     {
@@ -70,6 +80,11 @@ public class GestureSliderController : MonoBehaviour
             perfectZoneRect = perfectZoneIndicator.GetComponent<RectTransform>();
             perfectZoneIndicator.SetActive(false);
         }
+        if (backboardZoneIndicator != null)
+        {
+            backboardZoneRect = backboardZoneIndicator.GetComponent<RectTransform>();
+            backboardZoneIndicator.SetActive(false);
+        }
         sliderWidth = sliderBackground.rect.width;
         powerSlider.value = 0f;
     }
@@ -96,7 +111,8 @@ public class GestureSliderController : MonoBehaviour
         isGestureActive = true;
 
         GenerateRandomPerfectZone();
-        UpdatePerfectZoneVisual();
+        GenerateRandomBackboardZone();
+        UpdateZonesVisual();
 
         if (gestureTimerCoroutine != null) StopCoroutine(gestureTimerCoroutine);
         gestureTimerCoroutine = StartCoroutine(GestureTimeout());
@@ -119,8 +135,10 @@ public class GestureSliderController : MonoBehaviour
     {
         if (!isGestureActive) return;
         isGestureActive = false;
-        bool isPerfect = IsPerfectShot(currentPower);
-        OnShoot?.Invoke(currentPower, isPerfect);
+
+        ShotType type = ResolveShotType(currentPower);
+        OnShoot?.Invoke(type);
+
         if (gestureTimerCoroutine != null) StopCoroutine(gestureTimerCoroutine);
         StartCoroutine(ResetAfterShot());
     }
@@ -136,6 +154,7 @@ public class GestureSliderController : MonoBehaviour
         powerSlider.value = 0f;
         currentPower = 0f;
         if (perfectZoneIndicator != null) perfectZoneIndicator.SetActive(false);
+        if (backboardZoneIndicator != null) backboardZoneIndicator.SetActive(false);
     }
 
     void Update()
@@ -151,45 +170,126 @@ public class GestureSliderController : MonoBehaviour
             powerSlider.value = currentPower;
         }
     }
-
-    void UpdatePerfectZoneVisual()
-    {
-        if (perfectZoneRect == null || sliderBackground == null) return;
-
-        float startX = perfectShotMin * sliderWidth;
-
-        perfectZoneRect.anchorMin = new Vector2(0, 0.5f);
-        perfectZoneRect.anchorMax = new Vector2(0, 0.5f);
-        perfectZoneRect.pivot = new Vector2(0, 0.5f);
-
-        perfectZoneRect.anchoredPosition = new Vector2(startX, 0);
-        perfectZoneRect.sizeDelta = new Vector2(sliderWidth * perfectShotRangeSize, perfectZoneRect.sizeDelta.y);
-
-        perfectZoneIndicator.SetActive(true);
-    }
-
     void GenerateRandomPerfectZone()
     {
-        float margin = perfectShotRangeSize / 2f;
-        perfectShotCenter = Random.Range(margin, 1f - margin);
-        perfectShotMin = Mathf.Clamp01(perfectShotCenter - (perfectShotRangeSize / 2f));
-        perfectShotMax = Mathf.Clamp01(perfectShotCenter + (perfectShotRangeSize / 2f));
+        float size = Mathf.Clamp01(perfectShotRangeSize);
+        //Make it on top but with space for backboard on top
+        float bandMin = 0.5f;
+        float bandMax = 0.8f;
+
+        size = Mathf.Min(size, Mathf.Max(0f, bandMax - bandMin));
+        if (size <= 0f)
+        {
+            perfectShotMin = perfectShotMax = perfectShotCenter = -1f;
+            if (perfectZoneIndicator) perfectZoneIndicator.SetActive(false);
+            return;
+        }
+
+        float centerMin = bandMin + size * 0.5f;
+        float centerMax = bandMax - size * 0.5f;
+
+        perfectShotCenter = Random.Range(centerMin, centerMax);
+        perfectShotMin = perfectShotCenter - size * 0.5f;
+        perfectShotMax = perfectShotCenter + size * 0.5f;
+
+        perfectShotMin = Mathf.Clamp01(perfectShotMin);
+        perfectShotMax = Mathf.Clamp01(perfectShotMax);
     }
 
-    bool IsPerfectShot(float power)
+    void GenerateRandomBackboardZone()
     {
-        return power >= perfectShotMin && power <= perfectShotMax;
+        float size = Mathf.Clamp01(backboardShotRangeSize);
+        const float eps = 0.0001f;
+
+        if (perfectShotMin < 0f || perfectShotMax < 0f)
+        {
+            float bandMin = 0.8f;
+            float bandMax = 1f;
+            size = Mathf.Min(size, Mathf.Max(0f, bandMax - bandMin));
+            if (size <= 0f)
+            {
+                backboardShotMin = backboardShotMax = backboardShotCenter = -1f;
+                if (backboardZoneIndicator) backboardZoneIndicator.SetActive(false);
+                return;
+            }
+
+            //Center
+            float cMin = bandMin + size * 0.5f;
+            float cMax = bandMax - size * 0.5f;
+            backboardShotCenter = Random.Range(cMin, cMax);
+            backboardShotMin = backboardShotCenter - size * 0.5f;
+            backboardShotMax = backboardShotCenter + size * 0.5f;
+
+            backboardShotMin = Mathf.Clamp01(backboardShotMin);
+            backboardShotMax = Mathf.Clamp01(backboardShotMax);
+            return;
+        }
+
+        //Make sure it does not overlap with perfect shot zone and its above it
+        float allowedMin = Mathf.Clamp01(perfectShotMax + eps);
+        float allowedMax = 1f;
+
+        size = Mathf.Min(size, Mathf.Max(0f, allowedMax - allowedMin));
+        if (size <= 0f)
+        {
+            backboardShotMin = backboardShotMax = backboardShotCenter = -1f;
+            if (backboardZoneIndicator) backboardZoneIndicator.SetActive(false);
+            return;
+        }
+
+        float centerMin = allowedMin + size * 0.5f;
+        float centerMax = allowedMax - size * 0.5f;
+
+        backboardShotCenter = Random.Range(centerMin, centerMax);
+        backboardShotMin = backboardShotCenter - size * 0.5f;
+        backboardShotMax = backboardShotCenter + size * 0.5f;
+
+        backboardShotMin = Mathf.Clamp01(backboardShotMin);
+        backboardShotMax = Mathf.Clamp01(backboardShotMax);
     }
 
-    public void GetPerfectZoneInfo(out float min, out float max, out float center)
+    void UpdateZonesVisual()
     {
-        min = perfectShotMin;
-        max = perfectShotMax;
-        center = perfectShotCenter;
+        bool hasPerfect = perfectShotMin >= 0f && perfectShotMax >= 0f;
+        bool hasBack = backboardShotMin >= 0f && backboardShotMax >= 0f;
+
+        if (perfectZoneRect != null)
+        {
+            if (hasPerfect) PlaceZone(perfectZoneRect, perfectShotMin, perfectShotMax - perfectShotMin, perfectZoneIndicator);
+            else if (perfectZoneIndicator) perfectZoneIndicator.SetActive(false);
+        }
+
+        if (backboardZoneRect != null)
+        {
+            if (hasBack) PlaceZone(backboardZoneRect, backboardShotMin, backboardShotMax - backboardShotMin, backboardZoneIndicator);
+            else if (backboardZoneIndicator) backboardZoneIndicator.SetActive(false);
+        }
     }
 
-    public void ForceFinishGestureFromAnimator()
+    void PlaceZone(RectTransform rect, float startNorm, float sizeNorm, GameObject go)
     {
-        FinishGesture();
+        float startX = startNorm * sliderWidth;
+        rect.anchorMin = new Vector2(0, 0.5f);
+        rect.anchorMax = new Vector2(0, 0.5f);
+        rect.pivot = new Vector2(0, 0.5f);
+        rect.anchoredPosition = new Vector2(startX, 0);
+        rect.sizeDelta = new Vector2(sliderWidth * sizeNorm, rect.sizeDelta.y);
+        if (go != null) go.SetActive(true);
+    }
+
+    ShotType ResolveShotType(float power)
+    {
+        bool isPerfect = power >= perfectShotMin && power <= perfectShotMax;
+        bool isBackboard = power >= backboardShotMin && power <= backboardShotMax;
+
+        if (isPerfect && isBackboard)
+        {
+            float distPerfect = Mathf.Abs(power - perfectShotCenter);
+            float distBack = Mathf.Abs(power - backboardShotCenter);
+            return distPerfect <= distBack ? ShotType.Perfect : ShotType.Backboard;
+        }
+        if (isPerfect) return ShotType.Perfect;
+        if (isBackboard) return ShotType.Backboard;
+        return ShotType.Normal;
     }
 }
