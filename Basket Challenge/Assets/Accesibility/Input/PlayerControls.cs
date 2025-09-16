@@ -154,94 +154,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
-        },
-        {
-            ""name"": ""TouchPC"",
-            ""id"": ""426f4ec8-bb3b-42fe-a9e1-6873d8d03f28"",
-            ""actions"": [
-                {
-                    ""name"": ""PrimaryTouch"",
-                    ""type"": ""Button"",
-                    ""id"": ""c8918768-3c42-49b7-9ba8-e9780675f1e1"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""TouchPosition"",
-                    ""type"": ""Value"",
-                    ""id"": ""ebdb41be-ff64-482b-bfc3-f2f02c5d682d"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""TouchPress"",
-                    ""type"": ""Button"",
-                    ""id"": ""43443467-0fa2-4db4-a7de-19b70f16623f"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""TouchDelta"",
-                    ""type"": ""Value"",
-                    ""id"": ""5e385453-3a99-478d-8030-5f0aaf6f00d7"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                }
-            ],
-            ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""fd9d8190-4cf7-4de9-b5e4-ba5f8de3913a"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": ""Tap"",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""PrimaryTouch"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""29a224bc-7676-4c22-b0aa-b31efbc26a7c"",
-                    ""path"": ""<Mouse>/position"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""TouchPosition"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""07e35905-c7e4-475c-aa88-0bfb1e03a88b"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""TouchPress"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""f2c6278b-5bd9-43ff-9f21-4c5093d7c5f8"",
-                    ""path"": ""<Mouse>/delta"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""TouchDelta"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                }
-            ]
         }
     ],
     ""controlSchemes"": []
@@ -252,12 +164,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_TouchScreen_TouchPosition = m_TouchScreen.FindAction("TouchPosition", throwIfNotFound: true);
         m_TouchScreen_TouchPress = m_TouchScreen.FindAction("TouchPress", throwIfNotFound: true);
         m_TouchScreen_TouchDelta = m_TouchScreen.FindAction("TouchDelta", throwIfNotFound: true);
-        // TouchPC
-        m_TouchPC = asset.FindActionMap("TouchPC", throwIfNotFound: true);
-        m_TouchPC_PrimaryTouch = m_TouchPC.FindAction("PrimaryTouch", throwIfNotFound: true);
-        m_TouchPC_TouchPosition = m_TouchPC.FindAction("TouchPosition", throwIfNotFound: true);
-        m_TouchPC_TouchPress = m_TouchPC.FindAction("TouchPress", throwIfNotFound: true);
-        m_TouchPC_TouchDelta = m_TouchPC.FindAction("TouchDelta", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -370,71 +276,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         }
     }
     public TouchScreenActions @TouchScreen => new TouchScreenActions(this);
-
-    // TouchPC
-    private readonly InputActionMap m_TouchPC;
-    private ITouchPCActions m_TouchPCActionsCallbackInterface;
-    private readonly InputAction m_TouchPC_PrimaryTouch;
-    private readonly InputAction m_TouchPC_TouchPosition;
-    private readonly InputAction m_TouchPC_TouchPress;
-    private readonly InputAction m_TouchPC_TouchDelta;
-    public struct TouchPCActions
-    {
-        private @PlayerControls m_Wrapper;
-        public TouchPCActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @PrimaryTouch => m_Wrapper.m_TouchPC_PrimaryTouch;
-        public InputAction @TouchPosition => m_Wrapper.m_TouchPC_TouchPosition;
-        public InputAction @TouchPress => m_Wrapper.m_TouchPC_TouchPress;
-        public InputAction @TouchDelta => m_Wrapper.m_TouchPC_TouchDelta;
-        public InputActionMap Get() { return m_Wrapper.m_TouchPC; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(TouchPCActions set) { return set.Get(); }
-        public void SetCallbacks(ITouchPCActions instance)
-        {
-            if (m_Wrapper.m_TouchPCActionsCallbackInterface != null)
-            {
-                @PrimaryTouch.started -= m_Wrapper.m_TouchPCActionsCallbackInterface.OnPrimaryTouch;
-                @PrimaryTouch.performed -= m_Wrapper.m_TouchPCActionsCallbackInterface.OnPrimaryTouch;
-                @PrimaryTouch.canceled -= m_Wrapper.m_TouchPCActionsCallbackInterface.OnPrimaryTouch;
-                @TouchPosition.started -= m_Wrapper.m_TouchPCActionsCallbackInterface.OnTouchPosition;
-                @TouchPosition.performed -= m_Wrapper.m_TouchPCActionsCallbackInterface.OnTouchPosition;
-                @TouchPosition.canceled -= m_Wrapper.m_TouchPCActionsCallbackInterface.OnTouchPosition;
-                @TouchPress.started -= m_Wrapper.m_TouchPCActionsCallbackInterface.OnTouchPress;
-                @TouchPress.performed -= m_Wrapper.m_TouchPCActionsCallbackInterface.OnTouchPress;
-                @TouchPress.canceled -= m_Wrapper.m_TouchPCActionsCallbackInterface.OnTouchPress;
-                @TouchDelta.started -= m_Wrapper.m_TouchPCActionsCallbackInterface.OnTouchDelta;
-                @TouchDelta.performed -= m_Wrapper.m_TouchPCActionsCallbackInterface.OnTouchDelta;
-                @TouchDelta.canceled -= m_Wrapper.m_TouchPCActionsCallbackInterface.OnTouchDelta;
-            }
-            m_Wrapper.m_TouchPCActionsCallbackInterface = instance;
-            if (instance != null)
-            {
-                @PrimaryTouch.started += instance.OnPrimaryTouch;
-                @PrimaryTouch.performed += instance.OnPrimaryTouch;
-                @PrimaryTouch.canceled += instance.OnPrimaryTouch;
-                @TouchPosition.started += instance.OnTouchPosition;
-                @TouchPosition.performed += instance.OnTouchPosition;
-                @TouchPosition.canceled += instance.OnTouchPosition;
-                @TouchPress.started += instance.OnTouchPress;
-                @TouchPress.performed += instance.OnTouchPress;
-                @TouchPress.canceled += instance.OnTouchPress;
-                @TouchDelta.started += instance.OnTouchDelta;
-                @TouchDelta.performed += instance.OnTouchDelta;
-                @TouchDelta.canceled += instance.OnTouchDelta;
-            }
-        }
-    }
-    public TouchPCActions @TouchPC => new TouchPCActions(this);
     public interface ITouchScreenActions
-    {
-        void OnPrimaryTouch(InputAction.CallbackContext context);
-        void OnTouchPosition(InputAction.CallbackContext context);
-        void OnTouchPress(InputAction.CallbackContext context);
-        void OnTouchDelta(InputAction.CallbackContext context);
-    }
-    public interface ITouchPCActions
     {
         void OnPrimaryTouch(InputAction.CallbackContext context);
         void OnTouchPosition(InputAction.CallbackContext context);

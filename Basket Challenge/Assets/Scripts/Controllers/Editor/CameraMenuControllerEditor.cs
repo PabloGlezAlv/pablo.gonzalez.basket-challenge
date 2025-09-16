@@ -8,14 +8,16 @@ public class CameraMenuControllerEditor : Editor
     private ReorderableList cameraSetupsList;
     private SerializedProperty moveSpeed;
     private SerializedProperty moveCurve;
-    private SerializedProperty gameTimer;
+    private SerializedProperty playerAnimatorController;
+    private SerializedProperty gameLocation;
 
     private void OnEnable()
     {
         SerializedProperty cameraSetups = serializedObject.FindProperty("cameraSetups");
         moveSpeed = serializedObject.FindProperty("moveSpeed");
         moveCurve = serializedObject.FindProperty("moveCurve");
-        gameTimer = serializedObject.FindProperty("gameTimer");
+        playerAnimatorController = serializedObject.FindProperty("playerAnimatorController");
+        gameLocation = serializedObject.FindProperty("gameLocation");
 
         cameraSetupsList = new ReorderableList(serializedObject, cameraSetups, true, true, true, true);
 
@@ -68,9 +70,9 @@ public class CameraMenuControllerEditor : Editor
         EditorGUILayout.PropertyField(moveCurve);
 
         EditorGUILayout.Space();
-        EditorGUILayout.LabelField("Game Components", EditorStyles.boldLabel);
-        EditorGUILayout.PropertyField(gameTimer);
-
+        EditorGUILayout.LabelField("Character Components", EditorStyles.boldLabel);
+        EditorGUILayout.PropertyField(playerAnimatorController);
+        EditorGUILayout.PropertyField(gameLocation);
         EditorGUILayout.Space();
 
         if (Application.isPlaying)

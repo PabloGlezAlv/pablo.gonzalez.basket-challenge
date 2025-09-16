@@ -47,7 +47,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1733742550462568312}
   - component: {fileID: 3666032111190032418}
-  - component: {fileID: 3108101165303552156}
   m_Layer: 0
   m_Name: Slider Red
   m_TagString: Untagged
@@ -130,26 +129,6 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &3108101165303552156
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4242257289336195676}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43d1dc47bf658484a87b4bdc6a651896, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerControls: {fileID: -944628639613478452, guid: de6822e8451d84e42826ec2e99c1b504,
-    type: 3}
-  powerSlider: {fileID: 3666032111190032418}
-  sliderBackground: {fileID: 6194063695476445137}
-  gestureTimeLimit: 3
-  sensitivity: 0.001
-  perfectShotRangeSize: 0.15
-  perfectZoneIndicator: {fileID: 9049186927871283019}
 --- !u!1 &6301285572456517906
 GameObject:
   m_ObjectHideFlags: 0
@@ -221,7 +200,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -298,7 +277,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}

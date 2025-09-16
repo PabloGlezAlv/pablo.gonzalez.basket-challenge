@@ -15,12 +15,12 @@ public class CameraMenuController : MonoBehaviour
     [Header("Camera Setup")]
     [SerializeField] private List<CameraSetup> cameraSetups = new List<CameraSetup>();
 
-    [Header("Movement Settings")]
     [SerializeField] private float moveSpeed = 2f;
     [SerializeField] private AnimationCurve moveCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
-    [Header("Game Components")]
-    [SerializeField] private GameTimer gameTimer;
+    [SerializeField] private PlayerAnimatorController playerAnimatorController;
+
+    [SerializeField] private Transform gameLocation;
 
     private bool isMoving = false;
     private CameraState currentState = CameraState.Menu;
@@ -47,11 +47,15 @@ public class CameraMenuController : MonoBehaviour
     public void MoveToMenu()
     {
         MoveTo(CameraState.Menu);
+
+        playerAnimatorController.GoMenu();
     }
 
     public void MoveToGameplay()
     {
         MoveTo(CameraState.Gameplay);
+
+        playerAnimatorController.GoGame(gameLocation.position);
     }
 
     public void MoveToReward()
@@ -112,11 +116,6 @@ public class CameraMenuController : MonoBehaviour
 
         currentState = targetSetup.state;
         ActivateTargetUI();
-
-        if (currentState == CameraState.Gameplay && gameTimer != null)
-        {
-            gameTimer.StartGame();
-        }
 
         isMoving = false;
     }
