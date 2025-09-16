@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(Rigidbody))]
@@ -15,35 +16,37 @@ public class PlayerAnimatorController : MonoBehaviour
     private Vector3 initPosition;
     private Quaternion initRotation;
 
+    public event Action OnReadyToShootEvent;
+    public event Action OnGameStarted;
+
+    public bool IsInGame { get; private set; }
+
     void Awake()
     {
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
-
         initPosition = transform.position;
         initRotation = transform.rotation;
     }
 
     public void GoGame(Vector3 target)
     {
-        if (moveCoroutine != null)
-            StopCoroutine(moveCoroutine);
-
+        if (moveCoroutine != null) StopCoroutine(moveCoroutine);
         animator.SetTrigger("goGame");
-
         moveCoroutine = StartCoroutine(MoveToTarget(target));
     }
 
     public void ReadyToShoot()
     {
-
+        Debug.Log("Player is ready to shoot");
+        OnReadyToShootEvent?.Invoke();
     }
 
     public void GoMenu()
     {
+        IsInGame = false;
         transform.position = initPosition;
         transform.rotation = initRotation;
-
         animator.SetTrigger("goMenu");
     }
 
@@ -54,26 +57,21 @@ public class PlayerAnimatorController : MonoBehaviour
 
     public void StopMoving()
     {
-        if (moveCoroutine != null)
-            StopCoroutine(moveCoroutine);
-
+        if (moveCoroutine != null) StopCoroutine(moveCoroutine);
         animator.SetBool("moving", false);
     }
 
     public void Teleport(Vector3 position)
     {
         rb.position = position;
-        if (lookAtTarget != null)
-            transform.LookAt(lookAtTarget.position);
+        if (lookAtTarget != null) transform.LookAt(lookAtTarget.position);
     }
 
     private IEnumerator MoveToTarget(Vector3 target)
     {
         animator.SetBool("moving", true);
-
-        target.y = transform.position.y; // Keep the same height
-
-        gameObject.transform.LookAt(target);
+        target.y = transform.position.y;
+        transform.LookAt(target);
 
         while (Vector3.Distance(transform.position, target) > 0.1f)
         {
@@ -84,8 +82,9 @@ public class PlayerAnimatorController : MonoBehaviour
 
         animator.SetBool("moving", false);
         moveCoroutine = null;
+        if (lookAtTarget != null) transform.LookAt(lookAtTarget.position);
 
-        if (lookAtTarget != null)
-            transform.LookAt(lookAtTarget.position);
+        IsInGame = true;
+        OnGameStarted?.Invoke();
     }
 }

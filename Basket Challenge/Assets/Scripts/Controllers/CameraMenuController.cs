@@ -14,12 +14,10 @@ public class CameraMenuController : MonoBehaviour
 
     [Header("Camera Setup")]
     [SerializeField] private List<CameraSetup> cameraSetups = new List<CameraSetup>();
-
     [SerializeField] private float moveSpeed = 2f;
     [SerializeField] private AnimationCurve moveCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
-
     [SerializeField] private PlayerAnimatorController playerAnimatorController;
-
+    [SerializeField] private GestureSliderController gestureController;
     [SerializeField] private Transform gameLocation;
 
     private bool isMoving = false;
@@ -42,30 +40,32 @@ public class CameraMenuController : MonoBehaviour
     private void Start()
     {
         SetCameraState(CameraState.Menu);
+        if (gestureController != null) gestureController.DisableControls();
     }
 
     public void MoveToMenu()
     {
         MoveTo(CameraState.Menu);
-
         playerAnimatorController.GoMenu();
+        if (gestureController != null) gestureController.DisableControls();
     }
 
     public void MoveToGameplay()
     {
         MoveTo(CameraState.Gameplay);
-
         playerAnimatorController.GoGame(gameLocation.position);
     }
 
     public void MoveToReward()
     {
         MoveTo(CameraState.Reward);
+        if (gestureController != null) gestureController.DisableControls();
     }
 
     public void MoveToPlayAgain()
     {
         MoveTo(CameraState.PlayAgain);
+        if (gestureController != null) gestureController.DisableControls();
     }
 
     public void ExitGame()
@@ -120,23 +120,16 @@ public class CameraMenuController : MonoBehaviour
         isMoving = false;
     }
 
-
     private void DeactivateCurrentUI()
     {
         CameraSetup currentSetup = GetCameraSetup(currentState);
-        if (currentSetup?.uiPanel != null)
-        {
-            currentSetup.uiPanel.SetActive(false);
-        }
+        if (currentSetup?.uiPanel != null) currentSetup.uiPanel.SetActive(false);
     }
 
     private void ActivateTargetUI()
     {
         CameraSetup currentSetup = GetCameraSetup(currentState);
-        if (currentSetup?.uiPanel != null)
-        {
-            currentSetup.uiPanel.SetActive(true);
-        }
+        if (currentSetup?.uiPanel != null) currentSetup.uiPanel.SetActive(true);
     }
 
     private void SetCameraState(CameraState state)
@@ -158,10 +151,7 @@ public class CameraMenuController : MonoBehaviour
     {
         foreach (var setup in cameraSetups)
         {
-            if (setup.uiPanel != null)
-            {
-                setup.uiPanel.SetActive(false);
-            }
+            if (setup.uiPanel != null) setup.uiPanel.SetActive(false);
         }
     }
 
@@ -169,10 +159,7 @@ public class CameraMenuController : MonoBehaviour
     {
         foreach (var setup in cameraSetups)
         {
-            if (setup.state == state)
-            {
-                return setup;
-            }
+            if (setup.state == state) return setup;
         }
         return null;
     }
