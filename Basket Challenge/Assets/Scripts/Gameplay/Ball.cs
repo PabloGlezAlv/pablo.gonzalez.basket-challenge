@@ -4,23 +4,38 @@ public class Ball : MonoBehaviour
 {
     [SerializeField] private Transform basketTarget;
 
-    private int collisionCount;
+    private ShotType shotType;
     private Rigidbody rb;
+
+    private int points = 0;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
     }
 
-    public void Init(Transform target)
+    public void Init(ShotType type, Transform target)
     {
+        shotType = type;
         basketTarget = target;
+
+        switch (type)
+        {
+            case ShotType.Normal:
+                points = 2;
+                break;
+            case ShotType.Perfect:
+                points = 3;
+                break;
+            case ShotType.Backboard:
+                points = 2;
+                break;
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        collisionCount++;
-        if (basketTarget == null) return;
+        if (basketTarget == null || shotType != ShotType.Backboard) return;
         if (collision.collider.GetComponent<Backboard>() == null && collision.collider.GetComponentInParent<Backboard>() == null) return;
 
         Vector3 p0 = collision.GetContact(0).point;
@@ -40,7 +55,7 @@ public class Ball : MonoBehaviour
         rb.velocity = d * k;
     }
     
-    // fake the backboard shot sop in case it hit the backbord the ball goes in
+    // fake the backboard shot in case it hit the backbord the ball goes in
     float SolveBallisticSpeed(Vector3 dir, Vector3 p0, Vector3 pt)
     {
         Vector3 sh = new Vector3(pt.x - p0.x, 0f, pt.z - p0.z);
@@ -58,8 +73,8 @@ public class Ball : MonoBehaviour
         return Mathf.Sqrt(k2);
     }
 
-    public int GetCollisionCount()
+    public int GetBallScore()
     {
-        return collisionCount;
+        return points;
     }
 }

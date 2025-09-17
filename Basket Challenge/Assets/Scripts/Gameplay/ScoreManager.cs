@@ -15,8 +15,7 @@ public class ScoreManager : MonoBehaviour
     {
         if (ball == null) return;
         
-        int collisionCount = ball.GetCollisionCount();
-        int pointsToAdd = collisionCount > 0 ? 2 : 3;
+        int pointsToAdd = ball.GetBallScore();
         
         totalScore += pointsToAdd;
         UpdateScoreUI();
