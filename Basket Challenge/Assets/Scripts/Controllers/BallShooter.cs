@@ -78,7 +78,7 @@ public class BallShooter : MonoBehaviour
         gestureController.DisableControls();
 
         CleanupBall();
-        SpawnBall();
+        SpawnBall(shotType);
         if (currentBall == null) return;
 
         Vector3 velocity = Vector3.zero;
@@ -134,11 +134,11 @@ public class BallShooter : MonoBehaviour
         ballRb.velocity = velocity;
     }
 
-    void SpawnBall()
+    void SpawnBall(ShotType shotType)
     {
         currentBall = Instantiate(ballPrefab, shootingPosition.position, Quaternion.identity);
         var b = currentBall.GetComponent<Ball>();
-        if (b != null) b.Init(basketTarget);
+        if (b != null) b.Init(shotType, basketTarget);
     }
 
     Vector3 ReflectPointAcrossPlane(Vector3 p, Vector3 planePoint, Vector3 planeNormal)

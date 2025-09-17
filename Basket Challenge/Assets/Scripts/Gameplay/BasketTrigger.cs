@@ -12,7 +12,7 @@ public class BasketTrigger : MonoBehaviour
         Ball ball = other.GetComponent<Ball>();
         if (ball != null)
         {
-            scoreManager.AddScore(ball);
+            scoreManager.AddScore(ball.GetBallScore());
             
             StartCoroutine(ResetAfterDelay(ball.gameObject));
         }
