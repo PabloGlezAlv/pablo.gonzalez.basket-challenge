@@ -14,9 +14,14 @@ public class BallShooter : MonoBehaviour
     [SerializeField] private Transform shootingPosition;
     [SerializeField] private Transform basketTarget;
     [SerializeField] private Transform rimReference;
-
     [SerializeField] private GestureSliderController gestureController;
     [SerializeField] private PlayerAnimatorController playerAnimator;
+
+    [Header("Backboard")]
+    [SerializeField] private Backboard backboard;
+    [SerializeField] private BoxCollider backboardCollider;
+    [SerializeField, Range(0f, 0.5f)] private float backboardMarginX = 0.05f;
+    [SerializeField, Range(0f, 0.5f)] private float backboardMarginY = 0.05f;
 
     [Header("Physics")]
     [SerializeField, Range(20f, 80f)] private float launchAngle = 45f;
@@ -78,8 +83,6 @@ public class BallShooter : MonoBehaviour
 
         Vector3 velocity = Vector3.zero;
 
-        Debug.Log("Shootinhg with shot type: " + shotType);
-
         if (basketTarget == null)
         {
             Debug.LogError("BallShooter: basketTarget no asignado.");
@@ -97,23 +100,31 @@ public class BallShooter : MonoBehaviour
                     break;
 
                 case ShotType.Normal:
-                    if (rimReference == null) { velocity = CalculateParabolicVelocity(); break; }
-                    float rimRadius = Vector3.Distance(rimReference.position, basketTarget.position);
-                    float ang = Random.Range(0f, Mathf.PI * 2f);
-                    float delta = Random.Range(-rimMargin, rimMargin);
-                    float r = Mathf.Max(0.01f, rimRadius + delta);
-                    Vector3 ringOffset = new Vector3(Mathf.Cos(ang) * r, 0f, Mathf.Sin(ang) * r);
-                    Vector3 ringTarget = new Vector3(
-                        basketTarget.position.x + ringOffset.x,
-                        basketTarget.position.y,
-                        basketTarget.position.z + ringOffset.z
-                    );
-                    velocity = CalculateParabolicVelocityTo(ringTarget);
-                    if (velocity == Vector3.zero) velocity = CalculateParabolicVelocity();
-                    break;
+                    {
+                        if (rimReference == null) { velocity = CalculateParabolicVelocity(); break; }
+                        float rimRadius = Vector3.Distance(rimReference.position, basketTarget.position);
+                        float ang = Random.Range(0f, Mathf.PI * 2f);
+                        float delta = Random.Range(-rimMargin, rimMargin);
+                        float r = Mathf.Max(0.01f, rimRadius + delta);
+                        Vector3 ringOffset = new Vector3(Mathf.Cos(ang) * r, 0f, Mathf.Sin(ang) * r);
+                        Vector3 ringTarget = new Vector3(
+                            basketTarget.position.x + ringOffset.x,
+                            basketTarget.position.y,
+                            basketTarget.position.z + ringOffset.z
+                        );
+                        velocity = CalculateParabolicVelocityTo(ringTarget);
+                        if (velocity == Vector3.zero) velocity = CalculateParabolicVelocity();
+                        break;
+                    }
 
                 case ShotType.Backboard:
-                    break;
+                    {
+                        if (backboardCollider == null) { velocity = CalculateParabolicVelocity(); break; }
+                        Vector3 impact = GetBackboardImpactPoint();
+                        velocity = CalculateParabolicVelocityTo(impact);
+                        if (velocity == Vector3.zero) velocity = CalculateParabolicVelocity();
+                        break;
+                    }
             }
         }
 
@@ -123,11 +134,17 @@ public class BallShooter : MonoBehaviour
         ballRb.velocity = velocity;
     }
 
-
-
     void SpawnBall()
     {
         currentBall = Instantiate(ballPrefab, shootingPosition.position, Quaternion.identity);
+        var b = currentBall.GetComponent<Ball>();
+        if (b != null) b.Init(basketTarget);
+    }
+
+    Vector3 ReflectPointAcrossPlane(Vector3 p, Vector3 planePoint, Vector3 planeNormal)
+    {
+        float d = Vector3.Dot(planeNormal, p - planePoint);
+        return p - 2f * d * planeNormal;
     }
 
     Vector3 CalculateParabolicVelocity()
@@ -135,6 +152,7 @@ public class BallShooter : MonoBehaviour
         return CalculateParabolicVelocityTo(basketTarget != null ? basketTarget.position : shootingPosition.position + shootingPosition.forward * 5f);
     }
 
+    //Methos that calculates the initial velocity needed to hit a target position with a parabolic arc
     Vector3 CalculateParabolicVelocityTo(Vector3 targetPos)
     {
         Vector3 startPos = shootingPosition.position;
@@ -157,6 +175,39 @@ public class BallShooter : MonoBehaviour
         return velocity;
     }
 
+    Vector3 GetBackboardImpactPoint()
+    {
+        var t = backboardCollider.transform;
+        var c = backboardCollider.center;
+        var s = backboardCollider.size;
+        Vector3 local = t.InverseTransformPoint(basketTarget.position);
+        float minX = c.x - s.x * 0.5f + backboardMarginX;
+        float maxX = c.x + s.x * 0.5f - backboardMarginX;
+        float minY = c.y - s.y * 0.5f + backboardMarginY;
+        float maxY = c.y + s.y * 0.5f - backboardMarginY;
+        local.x = Mathf.Clamp(local.x, minX, maxX);
+        local.y = Mathf.Clamp(local.y, minY, maxY);
+        local.z = c.z + s.z * 0.5f - 0.01f;
+        return t.TransformPoint(local);
+    }
+
+    public static Vector3 CalculateParabolicVelocityBetweenStatic(Vector3 startPos, Vector3 targetPos, float launchAngleDeg)
+    {
+        Vector3 displacement = targetPos - startPos;
+        Vector3 horizontalDisplacement = new Vector3(displacement.x, 0, displacement.z);
+        float horizontalDistance = horizontalDisplacement.magnitude;
+        float verticalDistance = displacement.y;
+        float angle = launchAngleDeg * Mathf.Deg2Rad;
+        float gravity = Mathf.Abs(Physics.gravity.y);
+        float denom = 2 * Mathf.Cos(angle) * Mathf.Cos(angle) * (horizontalDistance * Mathf.Tan(angle) - verticalDistance);
+        if (denom <= 0f) return Vector3.zero;
+        float velocityMagnitude = Mathf.Sqrt((gravity * horizontalDistance * horizontalDistance) / denom);
+        if (float.IsNaN(velocityMagnitude) || float.IsInfinity(velocityMagnitude)) return Vector3.zero;
+        Vector3 horizontalDirection = horizontalDisplacement.normalized;
+        Vector3 velocity = horizontalDirection * velocityMagnitude * Mathf.Cos(angle);
+        velocity.y = velocityMagnitude * Mathf.Sin(angle);
+        return velocity;
+    }
 
     void CleanupBall()
     {
