@@ -378,12 +378,12 @@ PrefabInstance:
     - target: {fileID: 4278494050651794047, guid: 5f3839588e246c24496f3c58d09695d2,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4501833649091699782, guid: 5f3839588e246c24496f3c58d09695d2,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5f3839588e246c24496f3c58d09695d2, type: 3}
@@ -392,6 +392,12 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1733742550462568312, guid: 5f3839588e246c24496f3c58d09695d2,
     type: 3}
   m_PrefabInstance: {fileID: 7008139}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8539867 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8539867, guid: 621cfe50b49a44c46a00b3cc936b3264,
+    type: 3}
+  m_PrefabInstance: {fileID: 3599446901515618045}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &63459070
 GameObject:
@@ -442,9 +448,11 @@ MonoBehaviour:
     type: 3}
   shootingPosition: {fileID: 1283237891}
   basketTarget: {fileID: 1086152019}
+  rimReference: {fileID: 8539867}
   gestureController: {fileID: 2022861320}
   playerAnimator: {fileID: 919132148755848279}
   launchAngle: 61.9
+  rimMargin: 0.00417
   showGizmos: 1
   showTrajectory: 1
   trajectoryPoints: 30
@@ -4937,7 +4945,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1767096871
 RectTransform:
   m_ObjectHideFlags: 0
@@ -12894,9 +12902,9 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1086152019, guid: 621cfe50b49a44c46a00b3cc936b3264, type: 3}
+    - target: {fileID: 8539867, guid: 621cfe50b49a44c46a00b3cc936b3264, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.01562
+      value: -0.01334
       objectReference: {fileID: 0}
     - target: {fileID: 1086152021, guid: 621cfe50b49a44c46a00b3cc936b3264, type: 3}
       propertyPath: shooter
