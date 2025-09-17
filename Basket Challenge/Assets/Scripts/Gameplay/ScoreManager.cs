@@ -11,12 +11,8 @@ public class ScoreManager : MonoBehaviour
         UpdateScoreUI();
     }
     
-    public void AddScore(Ball ball)
+    public void AddScore(int pointsToAdd)
     {
-        if (ball == null) return;
-        
-        int pointsToAdd = ball.GetBallScore();
-        
         totalScore += pointsToAdd;
         UpdateScoreUI();
     }
