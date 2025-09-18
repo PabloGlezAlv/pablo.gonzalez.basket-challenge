@@ -16,6 +16,7 @@ public class BallShooter : MonoBehaviour
     [SerializeField] private Transform rimReference;
     [SerializeField] private GestureSliderController gestureController;
     [SerializeField] private PlayerAnimatorController playerAnimator;
+    [SerializeField] private PlayerCurvePositioner playerPositionManager;
 
     [Header("Backboard")]
     [SerializeField] private Backboard backboard;
@@ -217,6 +218,7 @@ public class BallShooter : MonoBehaviour
     public void ResetBall(GameObject ballObj)
     {
         if (ballObj != null) Destroy(ballObj);
+        if (playerPositionManager != null) playerPositionManager.ResetPlayerInstant();
         if (gestureController != null) gestureController.EnableControls();
     }
 
