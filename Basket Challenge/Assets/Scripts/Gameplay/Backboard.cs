@@ -12,7 +12,6 @@ public class Backboard : MonoBehaviour
     [SerializeField] private float minFlightTime = 0.25f;
     [SerializeField] private float maxFlightTime = 1.5f;
     [SerializeField] private int solveIterations = 24;
-    [SerializeField] private float ignoreCollisionSeconds = 0.15f;
 
     [Header("Direction restriction")]
     [SerializeField] private float minDownwardVy = 0.0f;
@@ -34,20 +33,8 @@ public class Backboard : MonoBehaviour
 
         if (TrySolveDirectionKeepingSpeed_Downward(p0, pt, speed, out Vector3 vSolved))
         {
-            ApplyVelocitySafely(rb, vSolved, collision.collider);
-        }
-    }
-
-    private void ApplyVelocitySafely(Rigidbody rb, Vector3 newVelocity, Collider ballCol)
-    {
-        rb.velocity = newVelocity;
-        rb.angularVelocity = Vector3.zero;
-
-        var boardCol = GetComponent<Collider>();
-        if (boardCol && ballCol)
-        {
-            Physics.IgnoreCollision(boardCol, ballCol, true);
-            StartCoroutine(ReenableCollision(boardCol, ballCol, ignoreCollisionSeconds));
+            rb.velocity = vSolved;
+            rb.angularVelocity = Vector3.zero;
         }
     }
 
