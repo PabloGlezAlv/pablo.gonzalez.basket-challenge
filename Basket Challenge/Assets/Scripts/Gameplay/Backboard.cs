@@ -4,17 +4,17 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class Backboard : MonoBehaviour
 {
-    [Header("Objetivo")]
+    [Header("Target")]
     [SerializeField] private Transform basketTarget;
 
-    [Header("Ajuste de trayectoria")]
+    [Header("Trajectory adjust")]
     [SerializeField] private float contactPushOff = 0.02f;
     [SerializeField] private float minFlightTime = 0.25f;
     [SerializeField] private float maxFlightTime = 1.5f;
     [SerializeField] private int solveIterations = 24;
     [SerializeField] private float ignoreCollisionSeconds = 0.15f;
 
-    [Header("Restricción de dirección")]
+    [Header("Direction restriction")]
     [SerializeField] private float minDownwardVy = 0.0f;
 
     private void OnCollisionEnter(Collision collision)
@@ -57,6 +57,7 @@ public class Backboard : MonoBehaviour
         if (a && b) Physics.IgnoreCollision(a, b, false);
     }
 
+    // Uses the ballistic equation: |r - 0.5*g*t^2| = speed * t, solving for a downward direction (v.y <= -minDownwardVy).
     private bool TrySolveDirectionKeepingSpeed_Downward(Vector3 p0, Vector3 pt, float speed, out Vector3 vOut)
     {
         vOut = Vector3.zero;
