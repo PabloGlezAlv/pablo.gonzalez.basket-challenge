@@ -2663,13 +2663,12 @@ MonoBehaviour:
   player: {fileID: 919132148755848282}
   basket: {fileID: 1086152019}
   menuController: {fileID: 2022861319}
-  behindDistance: 6
-  behindHeight: 3
+  behindDistance: 2.43
+  behindHeight: 1.28
   ballOffset: {x: 0, y: 1.2, z: -2.5}
   activationDelay: 2
   followSmooth: 5
-  returnSmooth: 4
-  arriveEpsilon: 0.05
+  idleSmooth: 4
 --- !u!1 &970309469
 GameObject:
   m_ObjectHideFlags: 0
@@ -5913,7 +5912,7 @@ MonoBehaviour:
   - state: 3
     position: {fileID: 230139262}
     uiPanel: {fileID: 1484998720}
-  moveSpeed: 2
+  transitionDuration: 2
   moveCurve:
     serializedVersion: 2
     m_Curve:

@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8539866}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.00001, y: -0.01336, z: 0.03163}
+  m_LocalPosition: {x: -0.00001, y: -0.01334, z: 0.03163}
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -1160,6 +1160,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdf247ac98ac4f543a892d68c791c501, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  basketTarget: {fileID: 1086152019}
+  contactPushOff: 0.02
+  minFlightTime: 0.25
+  maxFlightTime: 1.5
+  solveIterations: 24
+  ignoreCollisionSeconds: 0.15
 --- !u!1 &6996593236557118824
 GameObject:
   m_ObjectHideFlags: 0
