@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class CameraMenuController : MonoBehaviour
 {
@@ -19,6 +20,8 @@ public class CameraMenuController : MonoBehaviour
     [SerializeField] private PlayerAnimatorController playerAnimatorController;
     [SerializeField] private GestureSliderController gestureController;
     [SerializeField] private Transform gameLocation;
+
+    public event Action<CameraState> OnStateChanged;
 
     private bool isMoving = false;
     private CameraState currentState = CameraState.Menu;
@@ -116,6 +119,7 @@ public class CameraMenuController : MonoBehaviour
 
         currentState = targetSetup.state;
         ActivateTargetUI();
+        OnStateChanged?.Invoke(currentState);
 
         isMoving = false;
     }
@@ -145,6 +149,7 @@ public class CameraMenuController : MonoBehaviour
 
         DeactivateAllUI();
         ActivateTargetUI();
+        OnStateChanged?.Invoke(currentState);
     }
 
     private void DeactivateAllUI()

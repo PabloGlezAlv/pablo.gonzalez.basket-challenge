@@ -37,8 +37,9 @@ public class BallShooter : MonoBehaviour
 
     private ShotType shotType;
     private bool hasPendingShot;
+    private bool turnEnded;
 
-    public event Action<GameObject> OnBallSpawned;
+    public event Action<Rigidbody> OnBallShooted;
     public event Action OnTurnEnded;
 
     public GameObject CurrentBall => ballRb != null ? ballRb.gameObject : null;
@@ -53,9 +54,6 @@ public class BallShooter : MonoBehaviour
 
         if (playerAnimator != null)
             playerAnimator.OnReadyToShootEvent += OnReadyToShoot;
-
-        if (ballRb != null)
-            OnBallSpawned?.Invoke(ballRb.gameObject);
     }
 
     void OnDestroy()
@@ -138,6 +136,8 @@ public class BallShooter : MonoBehaviour
         }
 
         if (velocity == Vector3.zero) return;
+
+        OnBallShooted?.Invoke(ballRb);
         ballRb.velocity = velocity;
     }
 
@@ -189,6 +189,8 @@ public class BallShooter : MonoBehaviour
     {
         ballRb.gameObject.SetActive(true);
 
+        turnEnded = false;
+
         ballRb.position = shootingPosition.position;
         ballRb.rotation = shootingPosition.rotation;
 
@@ -203,6 +205,9 @@ public class BallShooter : MonoBehaviour
 
     public void ResetBall(GameObject ballObj)
     {
+        if (turnEnded) return;  
+        turnEnded = true;
+
         if (playerPositionManager != null) playerPositionManager.ResetPlayerInstant();
         if (gestureController != null) gestureController.EnableControls();
         ballObj.SetActive(false);
