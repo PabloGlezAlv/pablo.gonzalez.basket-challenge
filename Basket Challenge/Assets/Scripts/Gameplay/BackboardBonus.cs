@@ -80,6 +80,7 @@ public class BackboardBonus : MonoBehaviour
 
     private IEnumerator DelayedTryActivate(float delay)
     {
+        Debug.Log("BackboardBonus will try to activate in " + delay + " seconds.");
         if (hasTriggered) yield break;
         yield return new WaitForSeconds(delay);
         if (!hasTriggered) ActivateOnce();
@@ -171,7 +172,7 @@ public class BackboardBonus : MonoBehaviour
             }
             else
             {
-                if (particles.isPlaying) particles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+                if (particles.isPlaying) particles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
                 particles.gameObject.SetActive(false);
             }
         }

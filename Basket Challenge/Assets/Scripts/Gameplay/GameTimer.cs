@@ -10,6 +10,7 @@ public class GameTimer : MonoBehaviour
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private float gameTime = 60f;
     [SerializeField] private ScoreManager scoreManager;
+    [SerializeField] private PlayerAnimatorController playerAnimatorController;
 
     private float currentTime;
     private bool isGameActive = false;
@@ -18,6 +19,21 @@ public class GameTimer : MonoBehaviour
     {
         currentTime = gameTime;
         UpdateTimerUI();
+    }
+    private void OnEnable()
+    {
+        if (playerAnimatorController != null)
+        {
+            playerAnimatorController.OnGameStarted += StartGame;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (playerAnimatorController != null)
+        {
+            playerAnimatorController.OnGameStarted -= StartGame;
+        }
     }
 
     private void Update()
