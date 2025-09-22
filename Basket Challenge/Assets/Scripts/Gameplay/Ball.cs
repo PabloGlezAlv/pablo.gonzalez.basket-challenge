@@ -26,8 +26,10 @@ public class Ball : MonoBehaviour
         }
     }
 
-    // ✅ único expuesto
     public ShotType ShotType => shotType;
-
+    public void OverridePoints(int newPoints)
+    {
+        points = newPoints;
+    }
     public int GetBallScore() => points;
 }

@@ -1,8 +1,12 @@
+using System;
 using UnityEngine;
 using TMPro;
 
 public class GameTimer : MonoBehaviour
 {
+    public event Action OnGameStarted;
+    public event Action OnGameEnded;
+
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private float gameTime = 60f;
     [SerializeField] private ScoreManager scoreManager;
@@ -18,18 +22,17 @@ public class GameTimer : MonoBehaviour
 
     private void Update()
     {
-        if (isGameActive)
+        if (!isGameActive) return;
+
+        currentTime -= Time.deltaTime;
+
+        if (currentTime <= 0f)
         {
-            currentTime -= Time.deltaTime;
-
-            if (currentTime <= 0)
-            {
-                currentTime = 0;
-                EndGame();
-            }
-
-            UpdateTimerUI();
+            currentTime = 0f;
+            EndGame();
         }
+
+        UpdateTimerUI();
     }
 
     [ContextMenu("Start Game")]
@@ -38,25 +41,24 @@ public class GameTimer : MonoBehaviour
         isGameActive = true;
         currentTime = gameTime;
 
-        if (scoreManager != null)
-        {
-            scoreManager.ResetScore();
-        }
+        if (scoreManager != null) scoreManager.ResetScore();
+
+        OnGameStarted?.Invoke();
     }
 
     public void EndGame()
     {
+        if (!isGameActive) return;
         isGameActive = false;
+        OnGameEnded?.Invoke();
     }
 
     private void UpdateTimerUI()
     {
-        if (timerText != null)
-        {
-            int minutes = Mathf.FloorToInt(currentTime / 60);
-            int seconds = Mathf.FloorToInt(currentTime % 60);
-            timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
-        }
+        if (timerText == null) return;
+        int minutes = Mathf.FloorToInt(currentTime / 60f);
+        int seconds = Mathf.FloorToInt(currentTime % 60f);
+        timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
     public bool IsGameActive()
