@@ -30,4 +30,9 @@ public class ScoreManager : MonoBehaviour
         totalScore = 0;
         UpdateScoreUI();
     }
+
+    public int GetTotalScore()
+    {
+        return totalScore;
+    }
 }

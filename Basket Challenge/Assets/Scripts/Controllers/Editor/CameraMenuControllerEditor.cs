@@ -10,6 +10,7 @@ public class CameraMenuControllerEditor : Editor
     private SerializedProperty moveCurve;
     private SerializedProperty playerAnimatorController;
     private SerializedProperty gameLocation;
+    private SerializedProperty gameTimer;
 
     private void OnEnable()
     {
@@ -18,6 +19,7 @@ public class CameraMenuControllerEditor : Editor
         moveCurve = serializedObject.FindProperty("moveCurve");
         playerAnimatorController = serializedObject.FindProperty("playerAnimatorController");
         gameLocation = serializedObject.FindProperty("gameLocation");
+        gameTimer = serializedObject.FindProperty("gameTimer");
 
         cameraSetupsList = new ReorderableList(serializedObject, cameraSetups, true, true, true, true);
 
@@ -73,6 +75,10 @@ public class CameraMenuControllerEditor : Editor
         EditorGUILayout.LabelField("Character Components", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(playerAnimatorController);
         EditorGUILayout.PropertyField(gameLocation);
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+        EditorGUILayout.LabelField("Game Components", EditorStyles.boldLabel);
+        EditorGUILayout.PropertyField(gameTimer);
         EditorGUILayout.Space();
 
         if (Application.isPlaying)

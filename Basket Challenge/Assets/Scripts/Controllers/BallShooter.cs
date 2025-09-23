@@ -19,6 +19,7 @@ public class BallShooter : MonoBehaviour
     [SerializeField] private GestureSliderController gestureController;
     [SerializeField] private PlayerAnimatorController playerAnimator;
     [SerializeField] private PlayerCurvePositioner playerPositionManager;
+    [SerializeField] private GameTimer gameTimer;
 
     [Header("Backboard")]
     [SerializeField] private Backboard backboard;
@@ -54,6 +55,9 @@ public class BallShooter : MonoBehaviour
 
         if (playerAnimator != null)
             playerAnimator.OnReadyToShootEvent += OnReadyToShoot;
+
+        if(gameTimer != null) 
+            gameTimer.OnGameEnded += HandleGameEnded;
     }
 
     void OnDestroy()
@@ -63,6 +67,13 @@ public class BallShooter : MonoBehaviour
 
         if (playerAnimator != null)
             playerAnimator.OnReadyToShootEvent -= OnReadyToShoot;
+        if (gameTimer != null)
+            gameTimer.OnGameEnded -= HandleGameEnded;
+    }
+    private void HandleGameEnded()
+    {
+        if (CurrentBall != null)
+            CurrentBall.SetActive(false);
     }
 
     void CacheShot(ShotType type)

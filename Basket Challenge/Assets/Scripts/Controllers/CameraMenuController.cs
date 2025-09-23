@@ -13,6 +13,8 @@ public class CameraMenuController : MonoBehaviour
         [SerializeField] public GameObject uiPanel;
     }
 
+    [SerializeField] private GameTimer gameTimer;
+
     [Header("Camera Setup")]
     [SerializeField] private List<CameraSetup> cameraSetups = new List<CameraSetup>();
     [SerializeField] private float moveSpeed = 2f;
@@ -39,7 +41,27 @@ public class CameraMenuController : MonoBehaviour
     {
         mainCamera = Camera.main.transform;
     }
+    private void OnEnable()
+    {
+        if (gameTimer != null)
+            gameTimer.OnGameEnded += HandleGameEnded;
+    }
 
+    private void OnDisable()
+    {
+        if (gameTimer != null)
+            gameTimer.OnGameEnded -= HandleGameEnded;
+    }
+    private void HandleGameEnded()
+    {
+        StartCoroutine(DelayedMoveToReward());
+    }
+
+    private IEnumerator DelayedMoveToReward()
+    {
+        yield return new WaitForSeconds(0.5f);
+        MoveToReward();
+    }
     private void Start()
     {
         SetCameraState(CameraState.Menu);
@@ -62,6 +84,7 @@ public class CameraMenuController : MonoBehaviour
     public void MoveToReward()
     {
         MoveTo(CameraState.Reward);
+        Debug.Log("MOviendo a reward");
         if (gestureController != null) gestureController.DisableControls();
     }
 
