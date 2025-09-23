@@ -1505,7 +1505,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6809043518433531267}
   - component: {fileID: 919132148755848277}
-  - component: {fileID: 919132148755848280}
   - component: {fileID: 919132148755848279}
   m_Layer: 0
   m_Name: Character
@@ -1551,22 +1550,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!54 &919132148755848280
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6139890278650629945}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 84
-  m_CollisionDetection: 0
 --- !u!114 &919132148755848279
 MonoBehaviour:
   m_ObjectHideFlags: 0

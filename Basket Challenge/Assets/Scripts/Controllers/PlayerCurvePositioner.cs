@@ -13,7 +13,9 @@ public class PlayerCurvePositioner : MonoBehaviour
     public void ResetPlayerInstant()
     {
         if (player == null || pointA == null || pointB == null) return;
-        float t = Random.Range(0, 1);
+        float t = Random.Range(0f, 1f);
+
+        Debug.Log($"Resetting player position on curve at t={t:F2}");
         lastSampledPoint = SampleBezier(pointA.position, controlPoint.position, pointB.position, t);
         if (lockYToPlayer) lastSampledPoint.y = player.transform.position.y;
         player.Teleport(lastSampledPoint);

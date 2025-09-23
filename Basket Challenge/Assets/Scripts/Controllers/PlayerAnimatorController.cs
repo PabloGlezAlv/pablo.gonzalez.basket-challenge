@@ -3,16 +3,13 @@ using System.Collections;
 using System;
 
 [RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(Rigidbody))]
 public class PlayerAnimatorController : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private Transform lookAtTarget;
 
     private Animator animator;
-    private Rigidbody rb;
     private Coroutine moveCoroutine;
-
     private Vector3 initPosition;
     private Quaternion initRotation;
 
@@ -24,7 +21,6 @@ public class PlayerAnimatorController : MonoBehaviour
     void Awake()
     {
         animator = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody>();
         initPosition = transform.position;
         initRotation = transform.rotation;
     }
@@ -63,7 +59,7 @@ public class PlayerAnimatorController : MonoBehaviour
 
     public void Teleport(Vector3 position)
     {
-        rb.position = position;
+        transform.position = position;
         if (lookAtTarget != null) transform.LookAt(lookAtTarget.position);
     }
 
@@ -76,12 +72,13 @@ public class PlayerAnimatorController : MonoBehaviour
         while (Vector3.Distance(transform.position, target) > 0.1f)
         {
             Vector3 newPos = Vector3.MoveTowards(transform.position, target, moveSpeed * Time.deltaTime);
-            rb.MovePosition(newPos);
+            transform.position = newPos;
             yield return null;
         }
 
         animator.SetBool("moving", false);
         moveCoroutine = null;
+
         if (lookAtTarget != null) transform.LookAt(lookAtTarget.position);
 
         IsInGame = true;
