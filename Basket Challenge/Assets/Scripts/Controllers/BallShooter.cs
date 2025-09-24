@@ -72,12 +72,14 @@ public class BallShooter : MonoBehaviour
     }
     private void HandleGameEnded()
     {
+        hasPendingShot = false;
         if (CurrentBall != null)
             CurrentBall.SetActive(false);
     }
 
     void CacheShot(ShotType type)
     {
+        if (!gameTimer.IsGameActive()) return;
         shotType = type;
         hasPendingShot = true;
     }
@@ -91,7 +93,7 @@ public class BallShooter : MonoBehaviour
 
     public void Shoot(ShotType shotType)
     {
-        if (gestureController == null || shootingPosition == null || ballRb == null) return;
+        if (gestureController == null || shootingPosition == null || ballRb == null || !gameTimer.IsGameActive()) return;
 
         gestureController.DisableControls();
 
@@ -216,7 +218,7 @@ public class BallShooter : MonoBehaviour
 
     public void ResetBall(GameObject ballObj)
     {
-        if (turnEnded) return;  
+        if (turnEnded || !gameTimer.IsGameActive()) return;  
         turnEnded = true;
 
         if (playerPositionManager != null) playerPositionManager.ResetPlayerInstant();

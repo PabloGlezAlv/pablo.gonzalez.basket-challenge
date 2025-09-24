@@ -71,7 +71,6 @@ public class CameraMenuController : MonoBehaviour
     public void MoveToMenu()
     {
         MoveTo(CameraState.Menu);
-        playerAnimatorController.GoMenu();
         if (gestureController != null) gestureController.DisableControls();
     }
 
@@ -84,7 +83,7 @@ public class CameraMenuController : MonoBehaviour
     public void MoveToReward()
     {
         MoveTo(CameraState.Reward);
-        Debug.Log("MOviendo a reward");
+        playerAnimatorController.GoMenu();
         if (gestureController != null) gestureController.DisableControls();
     }
 
