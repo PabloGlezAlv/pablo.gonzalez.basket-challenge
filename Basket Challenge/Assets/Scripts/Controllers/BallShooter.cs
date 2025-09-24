@@ -216,12 +216,12 @@ public class BallShooter : MonoBehaviour
     }
 
 
-    public void ResetBall(GameObject ballObj)
+    public void ResetBall(GameObject ballObj, bool scored)
     {
         if (turnEnded || !gameTimer.IsGameActive()) return;  
         turnEnded = true;
 
-        if (playerPositionManager != null) playerPositionManager.ResetPlayerInstant();
+        if (playerPositionManager != null && scored) playerPositionManager.ResetPlayerInstant();
         if (gestureController != null) gestureController.EnableControls();
         ballObj.SetActive(false);
 

@@ -23,7 +23,7 @@ public class BasketTrigger : MonoBehaviour
         yield return new WaitForSeconds(resetDelay);
         if (shooter != null)
         {
-            shooter.ResetBall(ballObj);
+            shooter.ResetBall(ballObj, true);
         }
     }
 }

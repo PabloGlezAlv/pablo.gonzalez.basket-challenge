@@ -21,7 +21,7 @@ public class FloorTrigger : MonoBehaviour
 
         if (shooter != null)
         {
-            shooter.ResetBall(ballObj);
+            shooter.ResetBall(ballObj, false);
         }
     }
 }
