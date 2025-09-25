@@ -116,7 +116,6 @@ public class CameraDirector : MonoBehaviour
         if (ball != null)
         {
             state = CamState.FollowBall;
-            Debug.Log("[CameraDirector] State -> FollowBall.");
         }
     }
 
@@ -125,7 +124,6 @@ public class CameraDirector : MonoBehaviour
         if (!activeControl) return;
         ball = null;
         state = CamState.Idle;
-        Debug.Log("[CameraDirector] State -> Idle.");
     }
 
     void UpdateFollowBall()
@@ -133,7 +131,6 @@ public class CameraDirector : MonoBehaviour
         if (ball == null || !ball.gameObject.activeInHierarchy)
         {
             state = CamState.Idle;
-            Debug.Log("[CameraDirector] Ball missing/inactive. State -> Idle.");
             return;
         }
 
