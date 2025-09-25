@@ -30,6 +30,7 @@ public class GestureSliderController : MonoBehaviour
     private InputActionMap touchScreenMap;
 
     private bool isGestureActive = false;
+    private bool shotInFlight = false;
     private float currentPower = 0f;
     private Coroutine gestureTimerCoroutine;
 
@@ -88,6 +89,14 @@ public class GestureSliderController : MonoBehaviour
         sliderWidth = sliderBackground.rect.width;
         powerSlider.value = 0f;
     }
+    void OnDestroy()
+    {
+        if (touchPressAction != null)
+        {
+            touchPressAction.started -= OnTouchStart;
+            touchPressAction.canceled -= OnTouchEnd;
+        }
+    }
 
     public void EnableControls()
     {
@@ -105,10 +114,13 @@ public class GestureSliderController : MonoBehaviour
     void OnTouchStart(InputAction.CallbackContext context)
     {
         if (!touchScreenMap.enabled) return;
-
+        if (isGestureActive) return;
+        if (shotInFlight) return;
+        
         currentPower = 0f;
         powerSlider.value = 0f;
         isGestureActive = true;
+        shotInFlight = true;
 
         GenerateRandomPerfectZone();
         GenerateRandomBackboardZone();
@@ -137,6 +149,7 @@ public class GestureSliderController : MonoBehaviour
         isGestureActive = false;
 
         ShotType type = ResolveShotType(currentPower);
+        Debug.Log($"Shot with power {currentPower:F2}, type: {type}");
         OnShoot?.Invoke(type);
 
         if (gestureTimerCoroutine != null) StopCoroutine(gestureTimerCoroutine);
@@ -291,5 +304,10 @@ public class GestureSliderController : MonoBehaviour
         if (isPerfect) return ShotType.Perfect;
         if (isBackboard) return ShotType.Backboard;
         return ShotType.Normal;
+    }
+
+    public void SetShotFlying(bool set)
+    {
+        shotInFlight = set;
     }
 }

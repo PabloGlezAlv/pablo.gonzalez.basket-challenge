@@ -34,7 +34,6 @@ public class PlayerAnimatorController : MonoBehaviour
 
     public void ReadyToShoot()
     {
-        Debug.Log("Player is ready to shoot");
         OnReadyToShootEvent?.Invoke();
     }
 

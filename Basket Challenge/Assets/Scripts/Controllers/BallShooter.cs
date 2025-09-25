@@ -42,7 +42,6 @@ public class BallShooter : MonoBehaviour
 
     public event Action<Rigidbody> OnBallShooted;
     public event Action OnTurnEnded;
-
     public GameObject CurrentBall => ballRb != null ? ballRb.gameObject : null;
 
     void Start()
@@ -87,6 +86,7 @@ public class BallShooter : MonoBehaviour
     void OnReadyToShoot()
     {
         if (!hasPendingShot) return;
+        gestureController.SetShotFlying(true);
         Shoot(shotType);
         hasPendingShot = false;
     }
@@ -220,6 +220,7 @@ public class BallShooter : MonoBehaviour
     {
         if (turnEnded || !gameTimer.IsGameActive()) return;  
         turnEnded = true;
+        gestureController.SetShotFlying(false);
 
         if (playerPositionManager != null && scored) playerPositionManager.ResetPlayerInstant();
         if (gestureController != null) gestureController.EnableControls();
