@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class BasketTrigger : MonoBehaviour
 {
@@ -9,6 +10,9 @@ public class BasketTrigger : MonoBehaviour
 
     [SerializeField] private ScoreFlyer scoreFlyer;
     [SerializeField] private CameraDirector cameraDirector;
+    [SerializeField] private FireballController fireballController;
+
+    public static event Action<int> OnScored;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -16,6 +20,13 @@ public class BasketTrigger : MonoBehaviour
         if (ball != null)
         {
             int score = ball.GetBallScore();
+            OnScored?.Invoke(score);
+
+            if (fireballController != null && fireballController.IsDoublePointsActive())
+            {
+                score *= 2;
+            }
+
             scoreManager.AddScore(score);
 
             cameraDirector.OnScoreMade();   

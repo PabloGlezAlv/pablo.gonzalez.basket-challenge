@@ -1018,7 +1018,7 @@ PrefabInstance:
     - target: {fileID: 1018648163358631474, guid: 7b9c3d59895fc1747977d7160f8defd1,
         type: 3}
       propertyPath: m_Name
-      value: Progress Bar Red
+      value: Fireball
       objectReference: {fileID: 0}
     - target: {fileID: 1342269739266895527, guid: 7b9c3d59895fc1747977d7160f8defd1,
         type: 3}
@@ -1168,6 +1168,27 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 350433211}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &350433213 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1018648163358631474, guid: 7b9c3d59895fc1747977d7160f8defd1,
+    type: 3}
+  m_PrefabInstance: {fileID: 350433211}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &350433214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 350433213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21ff3763ae4089642aae14f693b4c2ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  powerSlider: {fileID: 0}
+  increaseAmount: 0.2
+  decreaseSpeed: 0.1
 --- !u!1 &356991327
 GameObject:
   m_ObjectHideFlags: 0
@@ -13130,10 +13151,22 @@ PrefabInstance:
       propertyPath: scoreManager
       value: 
       objectReference: {fileID: 1938111952}
+    - target: {fileID: 1086152021, guid: 621cfe50b49a44c46a00b3cc936b3264, type: 3}
+      propertyPath: cameraDirector
+      value: 
+      objectReference: {fileID: 963194230}
+    - target: {fileID: 1086152021, guid: 621cfe50b49a44c46a00b3cc936b3264, type: 3}
+      propertyPath: fireballController
+      value: 
+      objectReference: {fileID: 350433214}
     - target: {fileID: 1149591963, guid: 621cfe50b49a44c46a00b3cc936b3264, type: 3}
       propertyPath: gameTimer
       value: 
       objectReference: {fileID: 2022861321}
+    - target: {fileID: 2023761436, guid: 621cfe50b49a44c46a00b3cc936b3264, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3925296779846810688, guid: 621cfe50b49a44c46a00b3cc936b3264,
         type: 3}
       propertyPath: m_RootOrder

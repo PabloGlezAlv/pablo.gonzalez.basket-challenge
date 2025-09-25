@@ -1,10 +1,13 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class FloorTrigger : MonoBehaviour
 {
     [SerializeField] private float resetDelay = 2f;
     [SerializeField] private BallShooter shooter;
+
+    public static event Action OnMissed;
 
     private void OnTriggerEnter(Collider other)
     {
