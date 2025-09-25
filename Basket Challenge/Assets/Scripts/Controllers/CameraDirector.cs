@@ -2,27 +2,27 @@ using UnityEngine;
 
 public class CameraDirector : MonoBehaviour
 {
-    public enum CamState { Idle, FollowBall }
+    public enum CamState { Idle, FollowBall, ScorePause }
 
-    [Header("Refs")]
     [SerializeField] private BallShooter shooter;
     [SerializeField] private Transform player;
     [SerializeField] private Transform basket;
     [SerializeField] private CameraMenuController menuController;
 
-    [Header("Offsets")]
     [SerializeField, Range(2f, 15f)] private float behindDistance = 6f;
     [SerializeField, Range(1f, 6f)] private float behindHeight = 3f;
     [SerializeField] private Vector3 ballOffset = new Vector3(0f, 1.2f, -2.5f);
 
-    [Header("Smoothing")]
     [SerializeField, Range(0f, 5f)] private float activationDelay = 2f;
     [SerializeField, Range(0.5f, 10f)] private float followSmooth = 5f;
     [SerializeField, Range(0.5f, 10f)] private float idleSmooth = 4f;
 
+    [SerializeField] private float scorePauseTime = 1.5f;
+
     private CamState state = CamState.Idle;
     private Transform ball;
     private bool activeControl;
+    private float scorePauseTimer = 0f;
 
     private void Awake()
     {
@@ -63,7 +63,6 @@ public class CameraDirector : MonoBehaviour
     private void LateUpdate()
     {
         if (!activeControl) return;
-
         switch (state)
         {
             case CamState.FollowBall:
@@ -72,6 +71,9 @@ public class CameraDirector : MonoBehaviour
             case CamState.Idle:
                 UpdateIdle();
                 break;
+            case CamState.ScorePause:
+                UpdateScorePause();
+                break;
         }
     }
 
@@ -79,14 +81,26 @@ public class CameraDirector : MonoBehaviour
     {
         ball = t;
         state = CamState.FollowBall;
-        Debug.Log("[CameraDirector] State -> FollowBall.");
     }
 
     public void EndFollow()
     {
         ball = null;
         state = CamState.Idle;
-        Debug.Log("[CameraDirector] State -> Idle.");
+    }
+
+    public void OnScoreMade()
+    {
+        state = CamState.ScorePause;
+        scorePauseTimer = 0f;
+        ball = null;
+    }
+
+    private void UpdateScorePause()
+    {
+        scorePauseTimer += Time.deltaTime;
+        LookAtBasket();
+        if (scorePauseTimer >= scorePauseTime) state = CamState.Idle;
     }
 
     void HandleMenuStateChanged(CameraMenuController.CameraState st)
@@ -113,10 +127,7 @@ public class CameraDirector : MonoBehaviour
     {
         if (!activeControl) return;
         ball = rb != null ? rb.transform : null;
-        if (ball != null)
-        {
-            state = CamState.FollowBall;
-        }
+        if (ball != null) state = CamState.FollowBall;
     }
 
     void HandleTurnEnded()
@@ -133,7 +144,6 @@ public class CameraDirector : MonoBehaviour
             state = CamState.Idle;
             return;
         }
-
         Vector3 targetPos = ball.position + ballOffset;
         transform.position = Vector3.Lerp(transform.position, targetPos, 1f - Mathf.Exp(-followSmooth * Time.deltaTime));
         transform.LookAt(ball.position, Vector3.up);
@@ -146,31 +156,24 @@ public class CameraDirector : MonoBehaviour
         LookAtBasket();
     }
 
-
     Vector3 GetForwardToTarget()
     {
         if (player == null) return transform.forward;
-
         Vector3 target = (basket != null) ? basket.position : (player.position + player.forward);
         Vector3 dir = target - player.position;
-
         dir.y = 0f;
-        if (dir.sqrMagnitude < 1e-6f) return transform.forward; 
-
+        if (dir.sqrMagnitude < 1e-6f) return transform.forward;
         return dir.normalized;
     }
-
 
     Vector3 GetBehindPlayerPosition()
     {
         if (player == null) return transform.position;
-
-        Vector3 fwdToTarget = GetForwardToTarget();            
+        Vector3 fwdToTarget = GetForwardToTarget();
         Vector3 p = player.position - fwdToTarget * behindDistance;
         p.y += behindHeight;
         return p;
     }
-
 
     void LookAtFrame()
     {

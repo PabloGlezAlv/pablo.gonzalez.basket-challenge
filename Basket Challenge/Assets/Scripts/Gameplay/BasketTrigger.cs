@@ -8,6 +8,7 @@ public class BasketTrigger : MonoBehaviour
     [SerializeField] private ScoreManager scoreManager;
 
     [SerializeField] private ScoreFlyer scoreFlyer;
+    [SerializeField] private CameraDirector cameraDirector;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -16,6 +17,8 @@ public class BasketTrigger : MonoBehaviour
         {
             int score = ball.GetBallScore();
             scoreManager.AddScore(score);
+
+            cameraDirector.OnScoreMade();   
 
             scoreFlyer.SetScore(score);
             scoreFlyer.gameObject.SetActive(true);
