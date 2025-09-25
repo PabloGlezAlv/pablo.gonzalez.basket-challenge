@@ -31,6 +31,7 @@ public class FireballController : MonoBehaviour
 
     private void HandleScored(int baseScore)
     {
+        if(doublePointsActive) return;
         powerSlider.value += increaseAmount;
 
         if (powerSlider.value >= powerSlider.maxValue && !doublePointsActive)
