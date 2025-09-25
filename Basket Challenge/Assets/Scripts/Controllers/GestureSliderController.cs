@@ -149,7 +149,6 @@ public class GestureSliderController : MonoBehaviour
         isGestureActive = false;
 
         ShotType type = ResolveShotType(currentPower);
-        Debug.Log($"Shot with power {currentPower:F2}, type: {type}");
         OnShoot?.Invoke(type);
 
         if (gestureTimerCoroutine != null) StopCoroutine(gestureTimerCoroutine);
@@ -166,6 +165,8 @@ public class GestureSliderController : MonoBehaviour
     {
         powerSlider.value = 0f;
         currentPower = 0f;
+        shotInFlight = false;
+        isGestureActive = false;
         if (perfectZoneIndicator != null) perfectZoneIndicator.SetActive(false);
         if (backboardZoneIndicator != null) backboardZoneIndicator.SetActive(false);
     }
