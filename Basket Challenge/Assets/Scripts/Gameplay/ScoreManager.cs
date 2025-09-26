@@ -3,36 +3,66 @@ using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI scoreText;
-    private int totalScore = 0;
+    [SerializeField] private TextMeshProUGUI playerScoreText;
+    [SerializeField] private TextMeshProUGUI enemyScoreText;
+    
+    private int playerScore = 0;
+    private int enemyScore = 0;
     
     private void Start()
     {
         UpdateScoreUI();
     }
     
+    public void AddPlayerScore(int pointsToAdd)
+    {
+        playerScore += pointsToAdd;
+        UpdateScoreUI();
+    }
+    
+    public void AddEnemyScore(int pointsToAdd)
+    {
+        enemyScore += pointsToAdd;
+        UpdateScoreUI();
+    }
+    
     public void AddScore(int pointsToAdd)
     {
-        totalScore += pointsToAdd;
-        UpdateScoreUI();
+        AddPlayerScore(pointsToAdd);
     }
     
     private void UpdateScoreUI()
     {
-        if (scoreText != null)
+        if (playerScoreText != null)
         {
-            scoreText.text = totalScore.ToString();
+            playerScoreText.text = playerScore.ToString();
+        }
+        
+        if (enemyScoreText != null)
+        {
+            enemyScoreText.text = enemyScore.ToString();
         }
     }
     
     public void ResetScore()
     {
-        totalScore = 0;
+        playerScore = 0;
+        enemyScore = 0;
         UpdateScoreUI();
     }
 
+    public int GetPlayerScore()
+    {
+        return playerScore;
+    }
+    
+    public int GetEnemyScore()
+    {
+        return enemyScore;
+    }
+    
     public int GetTotalScore()
     {
-        return totalScore;
+        return playerScore + enemyScore;
     }
 }

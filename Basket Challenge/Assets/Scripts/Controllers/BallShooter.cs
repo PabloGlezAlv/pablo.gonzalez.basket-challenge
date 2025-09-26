@@ -98,7 +98,7 @@ public class BallShooter : MonoBehaviour
         gestureController.DisableControls();
 
         CleanupBall();
-        if (ballScript != null) ballScript.Init(shotType, basketTarget);
+        if (ballScript != null) ballScript.Init(shotType, basketTarget, BallOwner.Player);
 
         Vector3 velocity = Vector3.zero;
 

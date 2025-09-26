@@ -2,10 +2,17 @@ using UnityEngine;
 using System.Collections;
 using System;
 
+public enum BallOwner
+{
+    Player,
+    Enemy
+}
+
 public class BasketTrigger : MonoBehaviour
 {
     [SerializeField] private float resetDelay = 2f;
-    [SerializeField] private BallShooter shooter;
+    [SerializeField] private BallShooter playerShooter;
+    [SerializeField] private AIEnemyShooter enemyShooter;
     [SerializeField] private ScoreManager scoreManager;
 
     [SerializeField] private ScoreFlyer scoreFlyer;
@@ -20,30 +27,46 @@ public class BasketTrigger : MonoBehaviour
         if (ball != null)
         {
             int score = ball.GetBallScore();
+            BallOwner owner = ball.GetBallOwner();
             OnScored?.Invoke(score);
 
-            if (fireballController != null && fireballController.IsDoublePointsActive())
+            if (fireballController != null && fireballController.IsDoublePointsActive() && owner == BallOwner.Player)
             {
                 score *= 2;
             }
 
-            scoreManager.AddScore(score);
+            if (owner == BallOwner.Player)
+            {
+                scoreManager.AddPlayerScore(score);
+            }
+            else
+            {
+                scoreManager.AddEnemyScore(score);
+            }
 
             cameraDirector.OnScoreMade();   
 
-            scoreFlyer.SetScore(score);
-            scoreFlyer.gameObject.SetActive(true);
+            if (owner == BallOwner.Player)
+            {
+                scoreFlyer.SetScore(score);
+                scoreFlyer.gameObject.SetActive(true);
+            }
 
-            StartCoroutine(ResetAfterDelay(ball.gameObject));
+            StartCoroutine(ResetAfterDelay(ball.gameObject, owner));
         }
     }
     
-    private IEnumerator ResetAfterDelay(GameObject ballObj)
+    private IEnumerator ResetAfterDelay(GameObject ballObj, BallOwner owner)
     {
         yield return new WaitForSeconds(resetDelay);
-        if (shooter != null)
+        
+        if (owner == BallOwner.Player && playerShooter != null)
         {
-            shooter.ResetBall(ballObj, true);
+            playerShooter.ResetBall(ballObj, true);
+        }
+        else if (owner == BallOwner.Enemy && enemyShooter != null)
+        {
+            enemyShooter.ResetBall(ballObj);
         }
     }
 }

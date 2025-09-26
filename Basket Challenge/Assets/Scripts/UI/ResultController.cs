@@ -51,8 +51,9 @@ public class ResultController : MonoBehaviour
     {
         if (isAnimating) return;
 
-        int currentScore = GetCurrentScore();
-        bool isVictory = currentScore > 0;
+        int playerScore = scoreManager.GetPlayerScore();
+        int enemyScore = scoreManager.GetEnemyScore();
+        bool isVictory = playerScore > enemyScore;
 
         if (isVictory)
         {
@@ -61,10 +62,10 @@ public class ResultController : MonoBehaviour
 
             if (victoryScoreText != null)
             {
-                victoryScoreText.text = currentScore.ToString();
+                victoryScoreText.text = playerScore.ToString();
             }
 
-            StartCoroutine(AnimateStarsBasedOnScore(currentScore));
+            StartCoroutine(AnimateStarsBasedOnScore(playerScore));
         }
         else
         {
@@ -73,7 +74,7 @@ public class ResultController : MonoBehaviour
 
             if (defeatScoreText != null)
             {
-                defeatScoreText.text = currentScore.ToString();
+                defeatScoreText.text = playerScore.ToString();
             }
         }
     }

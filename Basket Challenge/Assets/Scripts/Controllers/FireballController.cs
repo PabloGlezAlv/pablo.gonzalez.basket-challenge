@@ -46,10 +46,8 @@ public class FireballController : MonoBehaviour
 
     private void HandleMissed()
     {
-        if (doublePointsActive)
-        {
-            DeactivateDoublePoints();
-        }
+        DeactivateDoublePoints();
+        
         powerSlider.value = 0f;
     }
 
