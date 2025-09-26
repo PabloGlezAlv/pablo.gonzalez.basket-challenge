@@ -17,6 +17,7 @@ public class AIEnemyController : MonoBehaviour
     private Animator animator;
     private bool isGameActive = false;
     private Coroutine shootingCoroutine;
+    private GameTimer gameTimer;
     
     public event Action OnEnemyShoot;
     public bool IsGameActive => isGameActive;
@@ -33,7 +34,7 @@ public class AIEnemyController : MonoBehaviour
             mainPlayer.OnGameStarted += OnGameStarted;
         }
         
-        GameTimer gameTimer = FindObjectOfType<GameTimer>();
+        gameTimer = FindObjectOfType<GameTimer>();
         if (gameTimer != null)
         {
             gameTimer.OnGameEnded += OnGameEnded;
@@ -49,7 +50,6 @@ public class AIEnemyController : MonoBehaviour
             mainPlayer.OnGameStarted -= OnGameStarted;
         }
         
-        GameTimer gameTimer = FindObjectOfType<GameTimer>();
         if (gameTimer != null)
         {
             gameTimer.OnGameEnded -= OnGameEnded;
