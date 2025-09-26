@@ -13892,6 +13892,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1086152020, guid: 621cfe50b49a44c46a00b3cc936b3264, type: 3}
+      propertyPath: m_Center.z
+      value: -0.06
+      objectReference: {fileID: 0}
     - target: {fileID: 1086152021, guid: 621cfe50b49a44c46a00b3cc936b3264, type: 3}
       propertyPath: shooter
       value: 

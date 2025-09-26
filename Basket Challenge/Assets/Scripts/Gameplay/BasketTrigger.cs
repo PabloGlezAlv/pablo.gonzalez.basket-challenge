@@ -48,7 +48,8 @@ public class BasketTrigger : MonoBehaviour
             
             AudioManager.Instance.PlaySound(SoundType.SFX_Score);
 
-            cameraDirector.OnScoreMade();   
+            if (owner == BallOwner.Player && cameraDirector != null)
+                cameraDirector.OnScoreMade();   
 
             if (owner == BallOwner.Player)
             {
