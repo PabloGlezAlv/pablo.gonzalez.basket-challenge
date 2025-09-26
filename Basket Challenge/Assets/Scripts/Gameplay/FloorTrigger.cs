@@ -14,9 +14,11 @@ public class FloorTrigger : MonoBehaviour
         Ball ball = other.GetComponent<Ball>();
         if (ball != null)
         {
-            OnMissed?.Invoke();
-            
-            AudioManager.Instance.PlaySound(SoundType.SFX_Miss);
+            if (!ball.HasScored() && ball.GetBallOwner() == BallOwner.Player)
+            {
+                OnMissed?.Invoke();
+                AudioManager.Instance.PlaySound(SoundType.SFX_Miss);
+            }
                 
             StartCoroutine(ResetAfterDelay(ball.gameObject));
         }

@@ -27,6 +27,7 @@ public class BasketTrigger : MonoBehaviour
         Ball ball = other.GetComponent<Ball>();
         if (ball != null)
         {
+            ball.SetScored();
             int score = ball.GetBallScore();
             BallOwner owner = ball.GetBallOwner();
             OnScored?.Invoke(score);

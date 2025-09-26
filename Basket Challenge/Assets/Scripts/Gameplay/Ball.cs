@@ -8,6 +8,7 @@ public class Ball : MonoBehaviour
     private BallOwner ballOwner = BallOwner.Player;
     private Rigidbody rb;
     private int points = 0;
+    private bool hasScored = false;
 
     void Awake()
     {
@@ -19,6 +20,7 @@ public class Ball : MonoBehaviour
         shotType = type;
         basketTarget = target;
         ballOwner = owner;
+        hasScored = false;
 
         switch (type)
         {
@@ -30,6 +32,8 @@ public class Ball : MonoBehaviour
 
     public ShotType ShotType => shotType;
     public BallOwner GetBallOwner() => ballOwner;
+    public bool HasScored() => hasScored;
+    public void SetScored() => hasScored = true;
     public void OverridePoints(int newPoints)
     {
         points = newPoints;

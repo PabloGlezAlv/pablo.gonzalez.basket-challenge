@@ -62,7 +62,8 @@ public class FireballController : MonoBehaviour
     private void DeactivateDoublePoints()
     {
         doublePointsActive = false;
-        fireball.SetActive(false);
+        if (fireball != null)
+            fireball.SetActive(false);
         if (decreaseRoutine != null)
         {
             StopCoroutine(decreaseRoutine);
