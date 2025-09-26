@@ -23,17 +23,11 @@ public class VolumeSliderController : MonoBehaviour
 
     private void InitializeSlider()
     {
-        if (AudioManager.Instance != null)
-        {
-            volumeSlider.value = AudioManager.Instance.GetMasterVolume();
-        }
+        volumeSlider.value = AudioManager.Instance.GetMasterVolume();
     }
 
     private void OnVolumeChanged(float value)
     {
-        if (AudioManager.Instance != null)
-        {
-            AudioManager.Instance.SetMasterVolume(value);
-        }
+        AudioManager.Instance.SetMasterVolume(value);
     }
 }

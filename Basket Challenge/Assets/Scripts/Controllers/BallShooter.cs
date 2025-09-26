@@ -152,6 +152,8 @@ public class BallShooter : MonoBehaviour
 
         OnBallShooted?.Invoke(ballRb);
         ballRb.velocity = velocity;
+        
+        AudioManager.Instance.PlaySound(SoundType.SFX_BallShoot);
     }
 
     Vector3 CalculateParabolicVelocity()

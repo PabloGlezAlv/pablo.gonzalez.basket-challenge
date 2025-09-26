@@ -59,6 +59,8 @@ public class GameTimer : MonoBehaviour
 
         if (scoreManager != null) scoreManager.ResetScore();
 
+        AudioManager.Instance.PlaySound(SoundType.SFX_GameStart);
+
         OnGameStarted?.Invoke();
     }
 
@@ -66,6 +68,9 @@ public class GameTimer : MonoBehaviour
     {
         if (!isGameActive) return;
         isGameActive = false;
+        
+        AudioManager.Instance.PlaySound(SoundType.SFX_GameEnd);
+            
         OnGameEnded?.Invoke();
     }
 

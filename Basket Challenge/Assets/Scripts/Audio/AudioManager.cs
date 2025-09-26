@@ -113,16 +113,27 @@ public class AudioManager : MonoBehaviour
         
         foreach (var audioSource in audioSourcePool)
         {
-            if (audioSource.isPlaying)
+            if (audioSource.isPlaying && soundDictionary.ContainsValue(GetSoundDataFromClip(audioSource.clip)))
             {
-                audioSource.volume = audioSource.volume * masterVolume;
+                SoundData soundData = GetSoundDataFromClip(audioSource.clip);
+                audioSource.volume = soundData.volume * masterVolume;
             }
         }
 
-        if (musicAudioSource != null)
+        if (musicAudioSource != null && soundDictionary.TryGetValue(SoundType.Music_Background, out SoundData musicData))
         {
-            musicAudioSource.volume = musicAudioSource.volume * masterVolume;
+            musicAudioSource.volume = musicData.volume * masterVolume;
         }
+    }
+
+    private SoundData GetSoundDataFromClip(AudioClip clip)
+    {
+        foreach (var soundData in soundDictionary.Values)
+        {
+            if (soundData.audioClip == clip)
+                return soundData;
+        }
+        return null;
     }
 
     public float GetMasterVolume()

@@ -86,6 +86,8 @@ public class AIEnemyShooter : MonoBehaviour
         
         OnEnemyBallShooted?.Invoke(ballRb);
         ballRb.velocity = velocity;
+        
+        AudioManager.Instance.PlaySound(SoundType.SFX_BallShoot);
     }
     
     private Vector3 CalculateParabolicVelocity()

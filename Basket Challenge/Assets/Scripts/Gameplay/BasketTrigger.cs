@@ -45,6 +45,8 @@ public class BasketTrigger : MonoBehaviour
             {
                 scoreManager.AddEnemyScore(score);
             }
+            
+            AudioManager.Instance.PlaySound(SoundType.SFX_Score);
 
             cameraDirector.OnScoreMade();   
 
