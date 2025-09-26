@@ -21,13 +21,13 @@ public class FireballController : MonoBehaviour
     private void OnEnable()
     {
         powerSlider.value = 0;
-        BasketTrigger.OnScored += HandleScored;
+        BasketTrigger.OnPlayerScored += HandleScored;
         FloorTrigger.OnMissed += HandleMissed;
     }
 
     private void OnDisable()
     {
-        BasketTrigger.OnScored -= HandleScored;
+        BasketTrigger.OnPlayerScored -= HandleScored;
         FloorTrigger.OnMissed -= HandleMissed;
 
         DeactivateDoublePoints();

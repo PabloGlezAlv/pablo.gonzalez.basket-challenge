@@ -12,11 +12,10 @@ public class AIEnemyShooter : MonoBehaviour
     
     [Header("Physics")]
     [SerializeField, Range(20f, 80f)] private float launchAngle = 45f;
-    [SerializeField, Range(0f, 0.01f)] private float aimAccuracy = 0.005f;
     
-    [Header("AI Shooting Behavior")]
-    [SerializeField, Range(0f, 1f)] private float perfectShotChance = 0.3f;
-    [SerializeField, Range(0f, 1f)] private float normalShotChance = 0.6f;
+    [Header("AI Difficulty")]
+    [SerializeField, Range(0f, 1f)] private float aiSkillLevel = 0.5f;
+    [SerializeField, Range(0f, 0.02f)] private float baseAimAccuracy = 0.005f;
     
     public event Action<Rigidbody> OnEnemyBallShooted;
     public GameObject CurrentBall => ballRb != null ? ballRb.gameObject : null;
@@ -48,9 +47,12 @@ public class AIEnemyShooter : MonoBehaviour
     {
         float random = UnityEngine.Random.Range(0f, 1f);
         
-        if (random <= perfectShotChance)
+        float perfectChance = aiSkillLevel * 0.4f;
+        float normalChance = 0.4f + (aiSkillLevel * 0.2f);
+        
+        if (random <= perfectChance)
             return ShotType.Perfect;
-        else if (random <= perfectShotChance + normalShotChance)
+        else if (random <= perfectChance + normalChance)
             return ShotType.Normal;
         else
             return ShotType.Backboard;
@@ -95,7 +97,8 @@ public class AIEnemyShooter : MonoBehaviour
     {
         Vector3 targetPos = basketTarget.position;
         
-        float randomOffset = UnityEngine.Random.Range(-aimAccuracy, aimAccuracy);
+        float currentAccuracy = baseAimAccuracy * (2f - aiSkillLevel);
+        float randomOffset = UnityEngine.Random.Range(-currentAccuracy, currentAccuracy);
         targetPos.x += randomOffset;
         targetPos.z += randomOffset;
         
@@ -106,7 +109,9 @@ public class AIEnemyShooter : MonoBehaviour
     {
         Vector3 targetPos = basketTarget.position;
         targetPos.z += 1f;
-        targetPos.y += UnityEngine.Random.Range(0f, 0.5f);
+        
+        float yVariation = (1f - aiSkillLevel) * 0.7f;
+        targetPos.y += UnityEngine.Random.Range(0f, yVariation);
         
         return CalculateParabolicVelocityTo(targetPos);
     }

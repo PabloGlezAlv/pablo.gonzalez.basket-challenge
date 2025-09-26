@@ -20,6 +20,7 @@ public class BasketTrigger : MonoBehaviour
     [SerializeField] private FireballController fireballController;
 
     public static event Action<int> OnScored;
+    public static event Action<int> OnPlayerScored;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -38,6 +39,7 @@ public class BasketTrigger : MonoBehaviour
             if (owner == BallOwner.Player)
             {
                 scoreManager.AddPlayerScore(score);
+                OnPlayerScored?.Invoke(score);
             }
             else
             {

@@ -78,7 +78,6 @@ public class AIEnemyController : MonoBehaviour
     
     private void OnGameStarted()
     {
-        Debug.Log("AIEnemy: Game started, activating enemy");
         isGameActive = true;
         gameObject.SetActive(true);
         
@@ -150,8 +149,4 @@ public class AIEnemyController : MonoBehaviour
         OnEnemyShoot?.Invoke();
     }
     
-    public void SetOffset(float distance)
-    {
-        offsetDistance = distance;
-    }
 }

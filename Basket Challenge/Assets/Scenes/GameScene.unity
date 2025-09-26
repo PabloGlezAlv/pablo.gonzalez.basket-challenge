@@ -5194,9 +5194,9 @@ MonoBehaviour:
   basketTarget: {fileID: 1086152019}
   enemyController: {fileID: 4046345667949786936}
   launchAngle: 45
-  aimAccuracy: 0.005
-  perfectShotChance: 0.305
-  normalShotChance: 0.6
+  aimAccuracy: 0.01
+  perfectShotChance: 0.6
+  normalShotChance: 0.4
 --- !u!4 &1701582533
 Transform:
   m_ObjectHideFlags: 0
