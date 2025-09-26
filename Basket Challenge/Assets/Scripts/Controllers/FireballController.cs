@@ -4,6 +4,8 @@ using System.Collections;
 
 public class FireballController : MonoBehaviour
 {
+    [Header("Ball")]
+    [SerializeField] private GameObject fireball;
     [Header("UI")]
     [SerializeField] private Slider powerSlider;
     [SerializeField] private float increaseAmount = 0.2f;
@@ -27,6 +29,8 @@ public class FireballController : MonoBehaviour
     {
         BasketTrigger.OnScored -= HandleScored;
         FloorTrigger.OnMissed -= HandleMissed;
+
+        DeactivateDoublePoints();
     }
 
     private void HandleScored(int baseScore)
@@ -52,6 +56,7 @@ public class FireballController : MonoBehaviour
     private void ActivateDoublePoints()
     {
         doublePointsActive = true;
+        fireball.SetActive(true);
         if (decreaseRoutine != null) StopCoroutine(decreaseRoutine);
         decreaseRoutine = StartCoroutine(DecreaseSlider());
     }
@@ -59,6 +64,7 @@ public class FireballController : MonoBehaviour
     private void DeactivateDoublePoints()
     {
         doublePointsActive = false;
+        fireball.SetActive(false);
         if (decreaseRoutine != null)
         {
             StopCoroutine(decreaseRoutine);
