@@ -26,10 +26,6 @@ public class ScoreManager : MonoBehaviour
         UpdateScoreUI();
     }
     
-    public void AddScore(int pointsToAdd)
-    {
-        AddPlayerScore(pointsToAdd);
-    }
     
     private void UpdateScoreUI()
     {

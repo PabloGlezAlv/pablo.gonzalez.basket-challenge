@@ -79,10 +79,6 @@ public class ResultController : MonoBehaviour
         }
     }
 
-    private int GetCurrentScore()
-    {
-        return scoreManager.GetTotalScore();
-    }
 
     private IEnumerator AnimateStarsBasedOnScore(int totalScore)
     {
