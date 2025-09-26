@@ -91,7 +91,6 @@ public class CameraDirector : MonoBehaviour
 
     public void OnScoreMade()
     {
-        Debug.Log("CameraDirector: Score made - entering pause state");
         state = CamState.ScorePause;
         scorePauseTimer = 0f;
         ball = null;
@@ -101,11 +100,7 @@ public class CameraDirector : MonoBehaviour
     {
         scorePauseTimer += Time.deltaTime;
         LookAtBasket();
-        if (scorePauseTimer >= scorePauseTime) 
-        {
-            Debug.Log("CameraDirector: Score pause ended - returning to idle");
-            state = CamState.Idle;
-        }
+        if (scorePauseTimer >= scorePauseTime) state = CamState.Idle;
     }
 
     void HandleMenuStateChanged(CameraMenuController.CameraState st)
@@ -146,7 +141,6 @@ public class CameraDirector : MonoBehaviour
     {
         if (ball == null || !ball.gameObject.activeInHierarchy)
         {
-            Debug.Log($"CameraDirector: Lost ball - ball null: {ball == null}, ball inactive: {(ball != null ? !ball.gameObject.activeInHierarchy : false)}");
             state = CamState.Idle;
             return;
         }
