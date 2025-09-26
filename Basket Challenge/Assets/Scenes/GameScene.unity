@@ -5193,10 +5193,9 @@ MonoBehaviour:
   shootingPosition: {fileID: 4046345667949786937}
   basketTarget: {fileID: 1086152019}
   enemyController: {fileID: 4046345667949786936}
-  launchAngle: 45
-  aimAccuracy: 0.01
-  perfectShotChance: 0.6
-  normalShotChance: 0.4
+  launchAngle: 61.5
+  aiSkillLevel: 0.892
+  baseAimAccuracy: 0.005
 --- !u!4 &1701582533
 Transform:
   m_ObjectHideFlags: 0
@@ -13322,6 +13321,10 @@ PrefabInstance:
       propertyPath: scoreFlyer
       value: 
       objectReference: {fileID: 3599446901515618046}
+    - target: {fileID: 1086152021, guid: 621cfe50b49a44c46a00b3cc936b3264, type: 3}
+      propertyPath: enemyShooter
+      value: 
+      objectReference: {fileID: 1701582532}
     - target: {fileID: 1086152021, guid: 621cfe50b49a44c46a00b3cc936b3264, type: 3}
       propertyPath: scoreManager
       value: 

@@ -11,7 +11,7 @@ public enum BallOwner
 public class BasketTrigger : MonoBehaviour
 {
     [SerializeField] private float resetDelay = 2f;
-    [SerializeField] private BallShooter playerShooter;
+    [SerializeField] private BallShooter shooter;
     [SerializeField] private AIEnemyShooter enemyShooter;
     [SerializeField] private ScoreManager scoreManager;
 
@@ -62,9 +62,9 @@ public class BasketTrigger : MonoBehaviour
     {
         yield return new WaitForSeconds(resetDelay);
         
-        if (owner == BallOwner.Player && playerShooter != null)
+        if (owner == BallOwner.Player && shooter != null)
         {
-            playerShooter.ResetBall(ballObj, true);
+            shooter.ResetBall(ballObj, true);
         }
         else if (owner == BallOwner.Enemy && enemyShooter != null)
         {
